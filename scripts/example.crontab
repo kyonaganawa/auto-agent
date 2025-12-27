@@ -1,0 +1,124 @@
+# Auto-Agent Autonomous Scheduling Examples
+#
+# To use: crontab -e
+# Then copy the desired lines below
+#
+# IMPORTANT: Replace /path/to/auto-agent with your actual path
+# Example: /Users/outsmart104/Documents/Projects/Personal/auto-agent
+
+# ============================================
+# CONSERVATIVE SETUP (Recommended for Start)
+# ============================================
+
+# Daily morning briefing at 9 AM
+0 9 * * * /path/to/auto-agent/scripts/daily_agent.sh
+
+# Weekly asset check every Monday at 10 AM
+0 10 * * 1 /path/to/auto-agent/scripts/asset_generator_agent.sh check
+
+
+# ============================================
+# MODERATE SETUP
+# ============================================
+
+# Daily morning briefing at 9 AM
+0 9 * * * /path/to/auto-agent/scripts/daily_agent.sh
+
+# General autonomous run 3x daily (9 AM, 1 PM, 6 PM)
+0 9,13,18 * * * /path/to/auto-agent/scripts/autonomous_run.sh
+
+# Asset check every Monday at 10 AM
+0 10 * * 1 /path/to/auto-agent/scripts/asset_generator_agent.sh check
+
+# Asset optimization every Friday at 5 PM
+0 17 * * 5 /path/to/auto-agent/scripts/asset_generator_agent.sh optimize
+
+
+# ============================================
+# AGGRESSIVE SETUP (High Activity)
+# ============================================
+
+# Morning briefing at 8 AM
+0 8 * * * /path/to/auto-agent/scripts/daily_agent.sh
+
+# General autonomous run every 4 hours (8 AM, 12 PM, 4 PM, 8 PM)
+0 8,12,16,20 * * * /path/to/auto-agent/scripts/autonomous_run.sh
+
+# Asset check every Monday and Thursday at 9 AM
+0 9 * * 1,4 /path/to/auto-agent/scripts/asset_generator_agent.sh check
+
+# Asset optimization every Friday at 4 PM
+0 16 * * 5 /path/to/auto-agent/scripts/asset_generator_agent.sh optimize
+
+# Asset generation every other Wednesday (1st and 3rd) at 10 AM
+0 10 1-7,15-21 * 3 /path/to/auto-agent/scripts/asset_generator_agent.sh generate
+
+
+# ============================================
+# CUSTOM SCHEDULES
+# ============================================
+
+# Run every 6 hours
+0 */6 * * * /path/to/auto-agent/scripts/autonomous_run.sh
+
+# Run every hour during work hours (9 AM - 5 PM, Mon-Fri)
+0 9-17 * * 1-5 /path/to/auto-agent/scripts/autonomous_run.sh
+
+# Run every 30 minutes during peak hours
+*/30 9-17 * * * /path/to/auto-agent/scripts/autonomous_run.sh
+
+# Weekend asset generation (Saturday 10 AM)
+0 10 * * 6 /path/to/auto-agent/scripts/asset_generator_agent.sh generate
+
+
+# ============================================
+# CRON SYNTAX REFERENCE
+# ============================================
+#
+# * * * * *
+# │ │ │ │ │
+# │ │ │ │ └─ Day of week (0-7, 0 or 7 = Sunday)
+# │ │ │ └─── Month (1-12)
+# │ │ └───── Day of month (1-31)
+# │ └─────── Hour (0-23)
+# └───────── Minute (0-59)
+#
+# Special characters:
+# *  = Any value
+# ,  = List (e.g., 1,3,5)
+# -  = Range (e.g., 1-5)
+# /  = Step (e.g., */2 = every 2)
+#
+# Examples:
+# 0 9 * * *       = Every day at 9:00 AM
+# 0 */6 * * *     = Every 6 hours
+# 0 9 * * 1       = Every Monday at 9:00 AM
+# 0 9 1 * *       = 1st of every month at 9:00 AM
+# */15 * * * *    = Every 15 minutes
+# 0 9-17 * * 1-5  = Every hour 9 AM-5 PM, Mon-Fri
+
+
+# ============================================
+# ENVIRONMENT VARIABLES
+# ============================================
+#
+# Set API key for content generation
+# Add this at the TOP of your crontab:
+ANTHROPIC_API_KEY=sk-ant-api03-your-key-here
+
+# Set PATH if needed
+PATH=/usr/local/bin:/usr/bin:/bin
+
+# Set shell (recommended)
+SHELL=/bin/bash
+
+
+# ============================================
+# COST ESTIMATES (Claude Sonnet 4.5)
+# ============================================
+#
+# Conservative: ~$6/month
+# Moderate: ~$37/month
+# Aggressive: ~$150-300/month
+#
+# Start conservative, scale based on value generated!
