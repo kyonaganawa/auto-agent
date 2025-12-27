@@ -1,0 +1,126 @@
+{
+  "site": {
+    "name": "Indie Games Hub",
+    "tagline": "Your Ultimate Guide to Indie Gaming",
+    "description": "Discover the best indie games with our comprehensive reviews, guides, and curated top 10 lists. Find your next gaming obsession!",
+    "url": "https://indie-games-hub.com",
+    "language": "en",
+    "author": "Indie Games Hub Team"
+  },
+  "seo": {
+    "default_meta_description": "Explore comprehensive indie game reviews, expert guides, and curated top 10 lists. Your trusted source for discovering amazing indie games.",
+    "keywords": [
+      "indie games",
+      "indie game reviews",
+      "best indie games",
+      "indie game guides",
+      "independent games"
+    ],
+    "og_image": "/static/images/og-image.jpg",
+    "twitter_card": "summary_large_image"
+  },
+  "monetization": {
+    "google_adsense": {
+      "enabled": true,
+      "publisher_id": "ca-pub-XXXXXXXX",
+      "ad_slots": {
+        "header": "1234567890",
+        "sidebar": "0987654321",
+        "in_content": "1122334455"
+      }
+    },
+    "affiliates": {
+      "amazon": {
+        "enabled": true,
+        "tag": "indiegameshub-20"
+      },
+      "humble_bundle": {
+        "enabled": true,
+        "affiliate_id": "indiegameshub"
+      },
+      "steam": {
+        "enabled": true,
+        "curator_id": "12345678"
+      }
+    }
+  },
+  "social": {
+    "twitter": "https://twitter.com/indiegameshub",
+    "reddit": "https://reddit.com/r/indiegameshub",
+    "discord": "https://discord.gg/indiegameshub",
+    "youtube": "https://youtube.com/@indiegameshub"
+  },
+  "analytics": {
+    "google_analytics": {
+      "enabled": true,
+      "tracking_id": "G-XXXXXXXXXX"
+    },
+    "search_console": {
+      "enabled": true,
+      "verification": "google-site-verification=XXXXXXXXXXXX"
+    }
+  },
+  "features": {
+    "newsletter": true,
+    "comments": false,
+    "dark_mode": true,
+    "search": true
+  },
+  "navigation": {
+    "main": [
+      {"label": "Reviews", "url": "/reviews/"},
+      {"label": "Guides", "url": "/guides/"},
+      {"label": "Top Lists", "url": "/top-lists/"},
+      {"label": "News", "url": "/news/"},
+      {"label": "About", "url": "/about/"}
+    ],
+    "footer": [
+      {"label": "Privacy Policy", "url": "/privacy/"},
+      {"label": "Terms of Service", "url": "/terms/"},
+      {"label": "Contact", "url": "/contact/"},
+      {"label": "Advertise", "url": "/advertise/"}
+    ]
+  },
+  "categories": {
+    "reviews": {
+      "title": "Indie Game Reviews",
+      "description": "Honest, in-depth reviews of the latest indie games",
+      "subcategories": [
+        "action",
+        "adventure",
+        "rpg",
+        "puzzle",
+        "platformer",
+        "strategy",
+        "simulation"
+      ]
+    },
+    "guides": {
+      "title": "Game Guides & Tips",
+      "description": "Complete walkthroughs and helpful tips",
+      "subcategories": [
+        "beginner-tips",
+        "advanced-strategies",
+        "achievement-guides",
+        "secrets"
+      ]
+    },
+    "top-lists": {
+      "title": "Top 10 Lists",
+      "description": "Curated lists of the best indie games",
+      "subcategories": [
+        "by-genre",
+        "by-platform",
+        "by-year",
+        "hidden-gems"
+      ]
+    }
+  },
+  "content_settings": {
+    "articles_per_page": 12,
+    "excerpt_length": 150,
+    "reading_time": true,
+    "related_posts_count": 3,
+    "popular_posts_count": 5
+  }
+}
