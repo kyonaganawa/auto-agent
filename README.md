@@ -228,26 +228,95 @@ Comprehensive guides covering:
 
 ## Autonomous Operation
 
-The system is designed to run continuously and generate value without constant user input:
+The system can run continuously and generate value without constant user input using automated scripts:
 
-### Continuous Execution
-- **Background sessions**: Multiple Claude sessions run in parallel
-- **Task queue processing**: Automatically picks up and executes tasks
-- **Self-improvement cycles**: Regular analysis and optimization
-- **Proactive monitoring**: Watches for opportunities and issues
+### Quick Start - Run Autonomously
 
-### Intelligent Oversight
-- **Smart approval gates**: Only stops for truly critical decisions
-- **Risk assessment**: Evaluates changes before execution
-- **Auto-commit minor changes**: Documentation, tests, minor fixes
-- **Owner notification**: Sends updates based on importance
+```bash
+# 1. Test autonomous run manually
+./scripts/autonomous_run.sh
 
-### Value Generation
-- **Automated improvements**: Implements optimizations autonomously
-- **Code quality enhancement**: Refactors and improves existing code
-- **Documentation updates**: Keeps docs current automatically
-- **Testing expansion**: Adds tests for uncovered code
-- **Performance optimization**: Identifies and fixes bottlenecks
+# 2. Check the log
+cat logs/autonomous/run_*.log | tail -1
+
+# 3. Set up daily morning briefing
+crontab -e
+# Add: 0 9 * * * /path/to/auto-agent/scripts/daily_agent.sh
+
+# 4. Monitor results
+tail -f logs/autonomous/*.log
+```
+
+**See [scripts/README.md](scripts/README.md) for complete setup guide.**
+
+### Available Autonomous Scripts
+
+| Script | Purpose | Frequency | Cost/Month |
+|--------|---------|-----------|------------|
+| `autonomous_run.sh` | General-purpose agent (all objectives) | 3x daily | $27 |
+| `daily_agent.sh` | Morning briefing and daily prep | Daily | $6 |
+| `asset_generator_agent.sh` | Asset creation & optimization | Weekly | $4 |
+
+### Continuous Execution Modes
+
+**Conservative Setup** ($6/month):
+```bash
+# Daily morning briefing only
+0 9 * * * /path/to/scripts/daily_agent.sh
+```
+
+**Moderate Setup** ($37/month):
+```bash
+# Morning briefing + 3x daily runs + weekly asset check
+0 9 * * * /path/to/scripts/daily_agent.sh
+0 9,13,18 * * * /path/to/scripts/autonomous_run.sh
+0 10 * * 1 /path/to/scripts/asset_generator_agent.sh check
+```
+
+**Aggressive Setup** ($150-300/month):
+```bash
+# Hourly runs + weekly asset generation
+0 */1 * * * /path/to/scripts/autonomous_run.sh
+0 10 * * 3 /path/to/scripts/asset_generator_agent.sh generate
+```
+
+### What the Autonomous Agent Does
+
+- **Asset Generation**: Reviews and creates digital assets (websites, content)
+- **Professional Performance**: Organizes tasks, updates daily state, manages deliverables
+- **Personal Improvement**: Tracks habits, manages tasks, maintains notes
+- **Personal Projects**: Reviews project status and identifies next steps
+- **Logging**: Comprehensive logs of all actions for review and audit
+
+### Scheduling Options
+
+**Cron (Traditional)**:
+```bash
+crontab -e  # Add schedules from scripts/example.crontab
+```
+
+**GitHub Actions (Event-Driven)**:
+```yaml
+# .github/workflows/autonomous-agent.yml
+on:
+  schedule:
+    - cron: "0 9 * * *"
+# See scripts/README.md for full example
+```
+
+**launchd (macOS)**:
+```bash
+# See scripts/README.md for launchd setup
+```
+
+### Safety & Monitoring
+
+✅ **Safe by default**: Conservative tool permissions, max-turn limits
+✅ **Comprehensive logging**: All actions logged in `logs/autonomous/`
+✅ **Git-tracked**: Changes committed for review
+✅ **Cost-controlled**: Set API limits in Claude Console
+
+⚠️ **Best practice**: Start with Conservative setup, monitor for 1 week, then scale
 
 ## Project Structure
 
@@ -264,14 +333,17 @@ auto-agent/
 │   ├── monitoring/       # System monitoring agents
 │   └── communication/    # I/O communication agents
 ├── scripts/               # Automation scripts
-│   ├── continuous/       # Continuous operation scripts
-│   ├── messaging/        # Message handling
-│   └── monitoring/       # System monitoring
+│   ├── autonomous_run.sh      # General autonomous agent
+│   ├── daily_agent.sh         # Morning briefing agent
+│   ├── asset_generator_agent.sh # Asset generation agent
+│   ├── example.crontab        # Cron scheduling examples
+│   └── README.md              # Scripts documentation
 ├── logs/                  # System logs
-│   ├── sessions/         # Session logs
-│   ├── agents/           # Agent activity logs
-│   ├── summaries/        # Quick scan summaries
-│   └── analytics/        # Analysis data
+│   └── autonomous/       # Autonomous agent logs
+│       ├── run_*.log     # General autonomous runs
+│       ├── daily_*.log   # Daily briefings
+│       ├── briefing_*.md # Daily summaries
+│       └── asset_*.log   # Asset generation logs
 ├── input/                 # Input channels
 │   ├── tasks/            # Task queue (text files)
 │   ├── mobile/           # Mobile message cache
