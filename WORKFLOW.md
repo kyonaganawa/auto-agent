@@ -6,6 +6,58 @@ This document describes the development processes and workflows for the Auto-Age
 
 The Auto-Agent System uses a structured workflow that balances autonomous operation with owner oversight. This ensures quality while maximizing efficiency.
 
+The system operates continuously, processing tasks from multiple input channels, making intelligent decisions about when to request approval, and proactively generating value through self-improvement cycles.
+
+## Input Processing Workflows
+
+### 1. Claude Code CLI Input Workflow
+
+**Real-time Interactive Mode:**
+1. User sends message via Claude Code
+2. System processes immediately
+3. Interactive planning and approval as needed
+4. Execution with real-time feedback
+5. Results displayed to user
+
+### 2. Mobile Message Input Workflow (Pending Implementation)
+
+**Asynchronous Processing:**
+1. User sends message via mobile app
+2. Message stored in `input/mobile/` cache
+3. Communication Agent polls for new messages
+4. Message parsed and prioritized
+5. Added to task queue
+6. Acknowledgment sent to user
+7. Execution proceeds based on priority
+8. Notification sent when complete
+
+### 3. Text File Input Workflow
+
+**Batch Processing:**
+1. User creates task file in `input/tasks/`
+2. Monitoring Agent detects new file
+3. File parsed and validated
+4. Tasks added to queue with priority
+5. Original file moved to processed folder
+6. Execution proceeds automatically
+7. Results written to `output/reports/`
+
+**Task File Format (JSON):**
+```json
+{
+  "task_id": "task_001",
+  "priority": "high",
+  "type": "feature",
+  "description": "Add user authentication",
+  "requires_approval": true,
+  "deadline": "2025-12-30",
+  "metadata": {
+    "created_by": "Luciano",
+    "context": "Security improvement"
+  }
+}
+```
+
 ## Core Workflows
 
 ### 1. Feature Development Workflow
@@ -157,12 +209,223 @@ If approved, follow Feature Development workflow
 - Performance concerns
 
 #### Owner Review
-**When**: Before commit
+**When**: Before commit (for significant changes)
 **Focus**:
 - Business logic correctness
 - Architecture alignment
 - Maintainability
 - Final approval
+
+### 5. Autonomous Operation Workflow
+
+#### Continuous Task Processing
+
+**24/7 Operation:**
+1. **Monitor Input Queues**
+   - Poll all input channels every 5 minutes
+   - Check for new tasks, messages, files
+
+2. **Process Queue**
+   - Prioritize tasks (Critical → High → Medium → Low)
+   - Resolve dependencies
+   - Allocate resources
+
+3. **Execute Tasks**
+   - Assign to appropriate agents
+   - Run in parallel where possible
+   - Log all activities
+
+4. **Handle Results**
+   - Validate outputs
+   - Commit changes (if approved)
+   - Generate notifications
+   - Update analytics
+
+5. **Self-Monitor**
+   - Check system health
+   - Detect issues
+   - Trigger alerts if needed
+   - Loop continues
+
+#### Smart Approval Logic
+
+**Automatic Execution (No Approval):**
+- Documentation updates
+- Test additions (no code changes)
+- Log level adjustments
+- Code formatting
+- Minor refactoring (< 10 lines)
+- Dependency updates (patch versions)
+
+**Queue for Batch Approval (Daily):**
+- Medium refactoring (10-50 lines)
+- New utility functions
+- Test improvements
+- Performance optimizations
+- Minor dependency updates
+
+**Immediate Approval Required:**
+- Architecture changes
+- Security modifications
+- Breaking changes
+- Major refactoring (> 50 lines)
+- External service integrations
+- Database schema changes
+
+**Risk Assessment Algorithm:**
+```
+if (files_changed > 5 OR lines_changed > 50):
+    require_approval = True
+elif (changes_security OR changes_architecture):
+    require_approval = True
+elif (test_coverage_decrease > 5%):
+    require_approval = True
+elif (has_existing_tests AND tests_pass):
+    require_approval = False
+else:
+    require_approval = True
+```
+
+### 6. Continuous Monitoring Workflow
+
+#### System Health Monitoring
+
+**Every 15 Minutes:**
+1. Check system metrics
+   - Memory usage
+   - CPU utilization
+   - Queue depth
+   - Error rates
+
+2. Analyze logs
+   - Recent errors
+   - Performance degradation
+   - Unusual patterns
+
+3. Generate alerts if needed
+   - Critical: Immediate notification
+   - Warning: Add to daily digest
+
+#### Opportunity Detection
+
+**Hourly Analysis:**
+1. Scan codebase for:
+   - Duplicate code (refactoring opportunities)
+   - Missing tests
+   - Outdated dependencies
+   - Performance bottlenecks
+   - Documentation gaps
+
+2. Assess feasibility and impact
+
+3. Generate improvement proposals
+
+4. Add to task queue (low priority)
+
+### 7. Self-Improvement Workflow
+
+#### Daily Self-Improvement Cycle
+
+**Runs at 2 AM Daily:**
+
+**Phase 1: Analysis (30 min)**
+1. Review previous day's logs
+2. Analyze execution patterns
+3. Identify inefficiencies
+4. Detect repeated issues
+5. Generate insights
+
+**Phase 2: Planning (30 min)**
+1. Create improvement proposals
+2. Prioritize by impact
+3. Assess implementation effort
+4. Generate implementation plans
+
+**Phase 3: Execution (Varies)**
+1. Implement low-risk improvements automatically
+2. Queue medium-risk for owner review
+3. Present high-impact changes for approval
+
+**Phase 4: Learning**
+1. Store successful patterns
+2. Update decision models
+3. Refine approval algorithms
+4. Document learnings
+
+**Example Improvements:**
+- Optimize frequently-used code paths
+- Add tests for uncovered code
+- Update outdated documentation
+- Refactor complex functions
+- Remove dead code
+
+### 8. Notification Workflow
+
+#### Urgency-Based Notification
+
+**Critical (Immediate Push):**
+```
+Event → Log → Assess → Format → Push Notification → Deliver
+                                        ↓
+                                  SMS/Mobile App
+```
+
+**High (Within 1 Hour):**
+```
+Event → Log → Assess → Add to High Queue → Batch (hourly) → Deliver
+                                                                ↓
+                                                           Mobile Push
+```
+
+**Medium (Daily Digest):**
+```
+Event → Log → Assess → Add to Medium Queue → Batch (daily) → Email
+```
+
+**Low (Weekly Summary):**
+```
+Event → Log → Assess → Add to Low Queue → Batch (weekly) → Email Report
+```
+
+#### Notification Content
+
+**Critical Alert:**
+```
+🚨 CRITICAL: System Failure
+Time: 2025-12-26 14:30
+Issue: Database connection lost
+Impact: All tasks blocked
+Action Required: Immediate intervention needed
+
+View logs: /logs/sessions/2025-12-26/error_abc123.json
+```
+
+**High Priority:**
+```
+⚠️ Approval Needed: Architecture Change
+Task: Implement caching layer
+Estimated Impact: 50% performance improvement
+Risk: Medium (requires testing)
+Deadline: 2025-12-27
+
+Review plan: /output/reports/caching_proposal.md
+Approve via: Claude Code or Mobile App
+```
+
+**Medium (Daily Digest):**
+```
+📊 Daily Summary - 2025-12-26
+
+✅ Completed: 12 tasks
+🔧 Improvements: 5 optimizations
+📝 Updated: 3 documents
+✅ Tests Added: 15
+
+Key Achievement:
+- Database query optimization: 30% faster
+
+View full report: /output/reports/daily_2025-12-26.md
+```
 
 ## Git Workflow
 
@@ -445,32 +708,95 @@ Specific types of changes auto-approved if tests pass
 4. **Maintain test coverage**
 5. **Update tests** with code changes
 
+## Logging Practices
+
+### What to Log
+
+**Always Log:**
+- Every task execution (start, end, duration)
+- All agent activities
+- File modifications
+- Git operations
+- Errors and warnings
+- Approval requests and decisions
+- Notifications sent
+- System events (startup, shutdown, config changes)
+
+**Log Format:**
+Use structured JSON format for all logs (see LOGGING.md for details)
+
+### Log Levels
+
+- **DEBUG**: Development and troubleshooting information
+- **INFO**: Normal operational events
+- **WARN**: Warning messages, potential issues
+- **ERROR**: Error events that don't stop operation
+- **CRITICAL**: Failures requiring immediate attention
+
+### Quick Scan Usage
+
+**Daily Review:**
+1. Check `logs/summaries/daily_YYYY-MM-DD.json`
+2. Review key metrics and achievements
+3. Identify any errors or issues
+4. Plan follow-up actions
+
+**Deep Dive:**
+1. Use full logs in `logs/sessions/` for detailed investigation
+2. Analyze agent logs for performance tuning
+3. Review analytics for trend analysis
+
 ## Continuous Improvement
 
 ### Metrics to Track
 
+**Operational:**
 - Task completion time
+- Task success rate
+- Agent performance
+- Queue processing time
+- Error frequency
+
+**Quality:**
 - Bug frequency
 - Code quality scores
 - Test coverage
 - Documentation completeness
+- Technical debt metrics
+
+**Value:**
+- Improvements implemented
+- Performance gains achieved
+- Time saved through automation
+- Code quality improvements
 
 ### Regular Reviews
 
+**Automated (Continuous)**
+- Real-time monitoring via dashboards
+- Automated alerts on anomalies
+- Continuous metrics collection
+
 **Daily**
-- Review task progress
+- Review daily summary log
+- Check task progress
 - Address blockers
 - Update priorities
+- Review notifications sent
 
 **Weekly**
+- Comprehensive log review
 - Review completed work
-- Identify patterns
+- Identify patterns and trends
 - Plan improvements
+- Adjust automation rules
 
 **Monthly**
+- Strategic assessment
 - Assess system performance
-- Update processes
-- Strategic planning
+- Update processes and workflows
+- Review and refine approval gates
+- Long-term planning
 
 ## Best Practices
 

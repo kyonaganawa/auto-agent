@@ -9,38 +9,45 @@ The Auto-Agent System is built on a modular, extensible architecture that enable
 ## Architecture Layers
 
 ```
-┌─────────────────────────────────────────┐
-│         User Interface Layer            │
-│    (Claude Code CLI / API)              │
-└─────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│              Communication Layer                            │
+│  - Multi-channel Input (CLI, Mobile, Files)                │
+│  - Intelligent Output (Notifications, Reports)             │
+│  - Message Queue Management                                 │
+└─────────────────────────────────────────────────────────────┘
                    │
-┌─────────────────────────────────────────┐
-│       Orchestration Layer               │
-│  - Task Routing                         │
-│  - Agent Coordination                   │
-│  - State Management                     │
-└─────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│       Orchestration Layer                                   │
+│  - Task Routing                                             │
+│  - Agent Coordination                                       │
+│  - State Management                                         │
+│  - Continuous Operation Management                          │
+│  - Smart Approval Gates                                     │
+└─────────────────────────────────────────────────────────────┘
                    │
-┌─────────────────────────────────────────┐
-│         Agent Layer                     │
-│  - Specialized Agents                   │
-│  - Agent Communication                  │
-│  - Task Execution                       │
-└─────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│         Agent Layer                                         │
+│  - Specialized Agents (Dev, Plan, Research, Review)        │
+│  - Monitoring Agents (System Health, Opportunities)        │
+│  - Communication Agents (I/O Management)                   │
+│  - Agent Communication & Collaboration                      │
+└─────────────────────────────────────────────────────────────┘
                    │
-┌─────────────────────────────────────────┐
-│         Tool Layer                      │
-│  - File Operations                      │
-│  - Code Analysis                        │
-│  - External Integrations                │
-└─────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│         Tool Layer                                          │
+│  - File Operations                                          │
+│  - Code Analysis                                            │
+│  - External Integrations                                    │
+│  - Messaging APIs                                           │
+└─────────────────────────────────────────────────────────────┘
                    │
-┌─────────────────────────────────────────┐
-│       Storage Layer                     │
-│  - Git Repository                       │
-│  - File System                          │
-│  - State Persistence                    │
-└─────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│       Storage & Logging Layer                               │
+│  - Git Repository                                           │
+│  - File System                                              │
+│  - State Persistence                                        │
+│  - Comprehensive Logging (Structured, Analytics)           │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ## Core Components
@@ -85,6 +92,26 @@ The Auto-Agent System is built on a modular, extensible architecture that enable
   - Security analysis
 - Tools: Read, Bash (for tests), Grep
 
+**Monitoring Agent**
+- Purpose: System health and opportunity detection
+- Capabilities:
+  - Watch system performance
+  - Identify optimization opportunities
+  - Detect anomalies
+  - Generate insights and reports
+  - Trigger self-improvement cycles
+- Tools: Read, Grep, Bash, Analytics tools
+
+**Communication Agent**
+- Purpose: Multi-channel I/O management
+- Capabilities:
+  - Monitor input channels (CLI, mobile, files)
+  - Route messages to appropriate handlers
+  - Send notifications to owner
+  - Format and deliver reports
+  - Manage message queue priorities
+- Tools: File I/O, Messaging APIs, Notification systems
+
 #### Agent Communication
 
 Agents communicate through:
@@ -92,8 +119,227 @@ Agents communicate through:
 - **Shared context**: Access to common state and files
 - **Return values**: Child agents return results to parents
 - **File system**: Shared workspace for collaboration
+- **Message queue**: Asynchronous communication via queues
 
-### 2. Task Management
+### 2. Communication System
+
+#### Input Channels
+
+**Claude Code CLI Sessions**
+- Direct interactive communication
+- Real-time task assignment
+- Synchronous feedback loop
+- High-priority operations
+
+**Mobile Messages** (Implementation pending)
+- Quick task submission
+- Urgent approvals
+- Status queries
+- Platform options: Telegram Bot API, WhatsApp Business API, Custom app
+- Asynchronous processing
+- Priority flagging
+
+**Text File Queue**
+- File-based task definitions in `input/tasks/`
+- Batch operations
+- Scheduled tasks
+- Configuration updates
+- Format: JSON or YAML structured files
+
+#### Output Channels
+
+**Notification System**
+The system intelligently determines when to notify the owner based on:
+
+**Urgency Levels:**
+- **Critical**: Immediate notification required
+  - System failures
+  - Security alerts
+  - Data loss risks
+  - Blocking errors
+
+- **High**: Notification within 1 hour
+  - Major decisions needed
+  - Architecture changes
+  - Breaking changes
+  - Significant milestones
+
+- **Medium**: Daily digest
+  - Value-adding insights
+  - Optimization opportunities
+  - Completed tasks
+  - Performance reports
+
+- **Low**: Weekly summary
+  - Statistics
+  - Trends
+  - Minor improvements
+  - Documentation updates
+
+**Delivery Methods:**
+- Mobile push notifications (critical/high)
+- Email summaries (medium/low)
+- Dashboard reports (all levels)
+- Log files (all levels)
+
+#### Message Queue Architecture
+
+```
+Input Queue → Prioritization → Routing → Agent Assignment → Execution
+                     ↓
+              Monitoring & Logging
+                     ↓
+          Output Queue → Notification Delivery
+```
+
+### 3. Logging System
+
+#### Log Structure
+
+**Hierarchical Logging:**
+```
+logs/
+├── sessions/          # Complete session transcripts
+│   └── YYYY-MM-DD/
+│       └── session_ID.json
+├── agents/            # Agent-specific activity
+│   └── agent_type/
+│       └── YYYY-MM-DD_activity.json
+├── summaries/         # Quick scan summaries
+│   └── daily_YYYY-MM-DD.json
+└── analytics/         # Aggregated metrics
+    └── weekly_stats.json
+```
+
+#### Log Levels
+
+- **DEBUG**: Detailed technical information
+- **INFO**: General operational events
+- **WARN**: Warning messages, non-critical issues
+- **ERROR**: Error events
+- **CRITICAL**: Critical failures requiring immediate attention
+
+#### Log Entry Format
+
+```json
+{
+  "timestamp": "2025-12-26T10:30:00Z",
+  "level": "INFO",
+  "agent": "development_agent",
+  "action": "file_modified",
+  "details": {
+    "file": "src/example.ts",
+    "lines_changed": 15,
+    "operation": "refactor"
+  },
+  "duration_ms": 1234,
+  "session_id": "sess_abc123",
+  "task_id": "task_xyz789"
+}
+```
+
+#### Quick Scan Capability
+
+Daily summaries provide fast overview:
+- Total tasks completed
+- Agents activated
+- Files modified
+- Errors encountered
+- Performance metrics
+- Key achievements
+
+#### Analytics Data
+
+Collected for analysis:
+- Task completion times
+- Agent performance metrics
+- Error patterns
+- Resource utilization
+- Code quality trends
+- Improvement opportunities
+
+### 4. Continuous Operation System
+
+#### Architecture
+
+**Session Management:**
+- Multiple parallel Claude sessions
+- Session pooling for efficiency
+- Auto-recovery from failures
+- Resource allocation
+
+**Task Queue Processing:**
+```
+┌─────────────┐
+│ Input Queue │
+└──────┬──────┘
+       │
+       ├→ Priority Sorting
+       ├→ Dependency Resolution
+       ├→ Resource Allocation
+       └→ Agent Assignment
+              ↓
+       ┌──────────────┐
+       │  Execution   │
+       └──────┬───────┘
+              │
+              ├→ Monitoring
+              ├→ Logging
+              └→ Completion
+                     ↓
+              ┌──────────────┐
+              │ Output Queue │
+              └──────────────┘
+```
+
+**Self-Improvement Cycles:**
+1. **Analysis Phase** (Daily)
+   - Review execution logs
+   - Identify patterns
+   - Detect inefficiencies
+
+2. **Planning Phase**
+   - Generate improvement proposals
+   - Assess impact and risk
+   - Queue for approval if needed
+
+3. **Execution Phase**
+   - Implement approved improvements
+   - Run tests
+   - Monitor results
+
+4. **Learning Phase**
+   - Store successful patterns
+   - Update best practices
+   - Refine algorithms
+
+#### Smart Approval Gates
+
+**Auto-Approve:**
+- Documentation updates
+- Test additions
+- Minor refactoring
+- Code formatting
+- Log level adjustments
+
+**Require Approval:**
+- Architecture changes
+- External dependencies
+- Security modifications
+- Breaking changes
+- Resource-intensive operations
+
+**Risk Assessment:**
+```typescript
+interface ChangeRisk {
+  impact: "low" | "medium" | "high";
+  reversibility: "easy" | "moderate" | "difficult";
+  testing_coverage: number; // percentage
+  approval_required: boolean;
+}
+```
+
+### 5. Task Management
 
 #### Task Lifecycle
 
@@ -140,7 +386,7 @@ Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
 
 Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`
 
-### 4. File Organization
+### 6. File Organization
 
 ```
 auto-agent/
@@ -148,11 +394,27 @@ auto-agent/
 │   ├── development/       # Development agents
 │   ├── planning/          # Planning agents
 │   ├── research/          # Research agents
-│   └── review/            # Review agents
+│   ├── review/            # Review agents
+│   ├── monitoring/        # Monitoring & analytics agents
+│   └── communication/     # I/O communication agents
 ├── scripts/               # Automation scripts
 │   ├── setup/            # Setup and initialization
 │   ├── tasks/            # Task automation
+│   ├── continuous/       # Continuous operation
+│   ├── messaging/        # Message handling
 │   └── utils/            # Utility scripts
+├── logs/                  # Comprehensive logging
+│   ├── sessions/         # Session transcripts
+│   ├── agents/           # Agent activity logs
+│   ├── summaries/        # Quick scan summaries
+│   └── analytics/        # Analytics data
+├── input/                 # Input channels
+│   ├── tasks/            # Task queue (text files)
+│   ├── mobile/           # Mobile message cache
+│   └── config/           # Dynamic configuration
+├── output/                # Output channels
+│   ├── notifications/    # Pending notifications
+│   └── reports/          # Generated reports
 ├── docs/                  # Documentation
 │   ├── guides/           # User guides
 │   ├── api/              # API documentation
@@ -160,9 +422,11 @@ auto-agent/
 ├── config/                # Configuration files
 │   ├── agents.json       # Agent configurations
 │   ├── workflows.json    # Workflow definitions
+│   ├── notifications.json # Notification rules
 │   └── settings.json     # System settings
 ├── state/                 # Runtime state
 │   ├── tasks.json        # Active task state
+│   ├── queue.json        # Task queue state
 │   └── history.json      # Execution history
 └── tests/                 # Test suites
     ├── unit/             # Unit tests
@@ -220,24 +484,98 @@ interface Workflow {
 
 ## Data Flow
 
-### Task Execution Flow
+### Input Processing Flow
 
 ```
-Owner Request
+┌─────────────────────────────────────────────┐
+│  Input Sources (CLI, Mobile, Text Files)   │
+└─────────────────┬───────────────────────────┘
+                  │
+          ┌───────▼────────┐
+          │ Message Queue  │
+          └───────┬────────┘
+                  │
+          ┌───────▼────────┐
+          │ Prioritization │
+          └───────┬────────┘
+                  │
+          ┌───────▼────────┐
+          │ Task Routing   │
+          └───────┬────────┘
+                  │
+          ┌───────▼────────┐
+          │ Agent Selection│
+          └───────┬────────┘
+                  │
+          ┌───────▼────────┐
+          │   Execution    │
+          └────────────────┘
+```
+
+### Task Execution Flow (Enhanced)
+
+```
+Owner Request / Auto-Generated Task
     ↓
-Task Definition
+Task Definition & Prioritization
     ↓
-Planning Agent (creates plan)
+Risk Assessment
     ↓
-Development Agent (implements)
+┌───────────────────┐
+│ Requires Approval?│
+└─────┬─────────┬───┘
+      NO        YES
+      │          │
+      │          └→ Owner Approval → Rejected → End
+      │                   │
+      │                Approved
+      │                   │
+      └──────┬────────────┘
+             │
+    Planning Agent (creates plan)
+             ↓
+    Development Agent (implements)
+             ↓
+    Review Agent (validates)
+             ↓
+    Logging & Analytics
+             ↓
+    Git Commit (if significant)
+             ↓
+    Output Queue (notifications)
+             ↓
+    Task Complete
+```
+
+### Continuous Operation Flow
+
+```
+System Start
     ↓
-Review Agent (validates)
+┌─────────────────────────────────┐
+│  Parallel Session Management    │
+│                                  │
+│  Session 1: Task Queue Processing│
+│  Session 2: Monitoring & Analysis│
+│  Session 3: Self-Improvement     │
+│  Session 4: Communication I/O    │
+└─────────────────────────────────┘
+    ↓           ↓           ↓
+Input      Monitoring   Learning
+Monitoring   Agents      Cycle
+    ↓           ↓           ↓
+Task Queue  Insights   Improvements
+Processing  Generated   Applied
+    ↓           ↓           ↓
+Execution   Notifications Updates
+    ↓           ↓           ↓
+Logging ←───────┴───────────┘
     ↓
-Owner Approval
+Analytics & Reporting
     ↓
-Git Commit
+Output Notifications
     ↓
-Task Complete
+Loop continues...
 ```
 
 ### Agent Collaboration Flow
@@ -250,11 +588,42 @@ Main Agent
          ↓
     Combines insights
          ↓
+    Risk Assessment
+         ↓
     Spawns Development Agent
          ↓
     Spawns Review Agent
          ↓
+    Logging Agent (records all)
+         ↓
+    Communication Agent (notifies if needed)
+         ↓
     Returns result
+```
+
+### Notification Flow
+
+```
+Event Occurs
+    ↓
+Logging System captures
+    ↓
+Urgency Assessment
+    ↓
+┌────────────────────────────────┐
+│  Critical? → Immediate Push    │
+│  High? → Notify within 1 hour  │
+│  Medium? → Add to daily digest │
+│  Low? → Add to weekly summary  │
+└────────────────────────────────┘
+    ↓
+Format Message
+    ↓
+Add to Output Queue
+    ↓
+Communication Agent delivers
+    ↓
+Log delivery status
 ```
 
 ## Extensibility
@@ -327,30 +696,54 @@ Main Agent
 
 ### Planned Improvements
 
-1. **Agent Learning**
-   - Store execution patterns
-   - Learn from successful approaches
-   - Avoid repeated mistakes
+1. **Mobile Application**
+   - Native iOS/Android app
+   - Real-time push notifications
+   - Quick task submission
+   - Voice input support
+   - Approval workflow UI
 
-2. **Advanced Orchestration**
+2. **Advanced Machine Learning**
+   - Pattern recognition from logs
+   - Predictive optimization
+   - Anomaly detection
+   - Auto-tuning of approval gates
+   - Success prediction models
+
+3. **Enhanced Orchestration**
    - Dynamic agent selection
-   - Load balancing
-   - Priority queuing
+   - Load balancing across sessions
+   - Intelligent priority queuing
+   - Resource optimization
+   - Cost management
 
-3. **Multi-Project Support**
+4. **Multi-Project Support**
    - Project isolation
    - Shared agent library
    - Cross-project learning
+   - Unified dashboard
+   - Resource pooling
 
-4. **Real-time Collaboration**
+5. **Real-time Collaboration**
    - WebSocket integration
    - Live progress updates
    - Interactive approval flow
+   - Real-time dashboard
+   - Multi-user support
 
-5. **Plugin System**
+6. **Plugin System**
    - Third-party agents
    - Custom tool integration
    - Extension marketplace
+   - API for external integrations
+   - Webhook support
+
+7. **Advanced Analytics**
+   - Predictive insights
+   - Cost-benefit analysis
+   - ROI tracking
+   - Performance optimization recommendations
+   - Trend analysis and forecasting
 
 ## Technical Stack
 
@@ -362,23 +755,99 @@ Main Agent
 
 ## Monitoring and Observability
 
-### Metrics
-- Task completion rate
-- Agent performance
-- Error rates
-- Resource usage
+### Metrics Tracked
 
-### Logging
-- Task execution logs
-- Agent activity logs
-- System events
-- Error tracking
+**Operational Metrics:**
+- Task completion rate and success rate
+- Agent performance (execution time, efficiency)
+- Error rates and patterns
+- Resource usage (tokens, API calls, memory)
+- Queue depth and processing time
 
-### Debugging
-- Verbose mode
-- Step-through execution
-- State inspection
-- Tool call tracing
+**Business Metrics:**
+- Value generated (improvements made)
+- Code quality trends
+- Test coverage evolution
+- Documentation completeness
+- Technical debt reduction
+
+**Performance Metrics:**
+- Response time per task type
+- Agent utilization rates
+- Bottleneck identification
+- Optimization opportunities
+- Cost per task
+
+### Logging (Comprehensive)
+
+**Session Logs:**
+- Complete conversation transcripts
+- Tool calls and results
+- Decision points
+- Execution timeline
+
+**Agent Activity Logs:**
+- Actions performed
+- Duration and resources used
+- Success/failure status
+- Error messages and stack traces
+
+**System Event Logs:**
+- System startup/shutdown
+- Configuration changes
+- Approval requests and decisions
+- Notifications sent
+
+**Analytics Logs:**
+- Aggregated statistics
+- Trend data
+- Pattern recognition results
+- Optimization recommendations
+
+### Quick Scan Summaries
+
+**Daily Summary:**
+```json
+{
+  "date": "2025-12-26",
+  "tasks_completed": 15,
+  "tasks_failed": 2,
+  "agents_active": ["development", "monitoring", "review"],
+  "files_modified": 8,
+  "commits": 3,
+  "errors": ["connection_timeout x1", "test_failure x1"],
+  "key_achievements": [
+    "Implemented new logging system",
+    "Optimized database queries (30% faster)",
+    "Added 25 new tests"
+  ],
+  "notifications_sent": 2
+}
+```
+
+### Debugging Tools
+
+**Verbose Mode:**
+- Detailed execution traces
+- Tool call inspection
+- State snapshots
+
+**Step-through Execution:**
+- Breakpoint support
+- Manual approval at each step
+- State inspection between steps
+
+**Analytics Dashboard:**
+- Real-time metrics
+- Historical trends
+- Performance graphs
+- Error analysis
+
+**Trace Analysis:**
+- End-to-end request tracing
+- Agent call graphs
+- Performance profiling
+- Resource utilization heatmaps
 
 ---
 
