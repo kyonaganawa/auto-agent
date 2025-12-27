@@ -1,0 +1,29 @@
+{
+  "date": "2025-12-27",
+  "status": "active",
+  "current_task": null,
+  "focus_block_active": false,
+  "todays_priorities": [],
+  "tasks": {
+    "completed": 0,
+    "in_progress": 0,
+    "pending": 0,
+    "total": 0
+  },
+  "meetings": {
+    "completed": 0,
+    "upcoming": 0,
+    "total_duration_minutes": 0
+  },
+  "focus_time": {
+    "total_minutes": 0,
+    "blocks_completed": 0,
+    "pomodoros_completed": 0
+  },
+  "achievements": [],
+  "blockers": [],
+  "energy_level": null,
+  "satisfaction_level": null,
+  "notes": "",
+  "last_updated": "2025-12-27T00:00:00Z"
+}
