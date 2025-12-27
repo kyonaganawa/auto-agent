@@ -26,7 +26,36 @@ This system creates revenue-generating digital assets including websites, social
 
 ## Quick Start
 
-### Create Your First Gaming Website
+### Automated Website Creation (Recommended)
+
+**Launch a complete gaming website in 30-60 minutes:**
+
+```bash
+# Navigate to scripts directory
+cd objectives/assets/websites/tools/scripts/
+
+# 1. Create website structure
+./create_gaming_website.sh indie-games-hub indie
+
+# 2. Generate 20 AI-powered articles (requires Claude API key)
+export ANTHROPIC_API_KEY='your-api-key'
+./generate_content.sh indie-games-hub 20
+
+# 3. Build static website
+./build_website.sh indie-games-hub
+
+# 4. Deploy to Netlify
+./deploy_website.sh indie-games-hub netlify
+```
+
+**Result:** Live gaming website with 20 SEO-optimized articles
+**Cost:** $6-10 (API usage)
+**Manual effort:** < 5 minutes
+**Automation:** 95%
+
+See [Automation Scripts README](websites/tools/scripts/README.md) for detailed usage.
+
+### Manual Exploration (Learning)
 
 1. **Review the Strategy**
    ```bash
