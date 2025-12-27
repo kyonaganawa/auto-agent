@@ -798,6 +798,276 @@ Use structured JSON format for all logs (see LOGGING.md for details)
 - Review and refine approval gates
 - Long-term planning
 
+## Objective-Specific Workflows
+
+The system supports four primary objectives. See [OBJECTIVES.md](OBJECTIVES.md) for complete details.
+
+### Asset Generation Workflows
+
+#### Website Project Workflow
+1. **Research**: Identify niche and opportunity
+2. **Planning**: Content strategy, technical stack
+3. **Development**: Build site, create content
+4. **Launch**: Deploy, configure SEO
+5. **Growth**: Content updates, optimization
+6. **Monetization**: Implement revenue streams
+7. **Scaling**: Expand content, replicate success
+
+#### App Development Workflow
+1. **Ideation**: Market research, validation
+2. **Design**: UI/UX, feature specification
+3. **Development**: Implementation, testing
+4. **Beta**: User testing, feedback integration
+5. **Launch**: App store deployment
+6. **Growth**: User acquisition, updates
+7. **Monetization**: Implement payment/ads
+
+#### Social Media Workflow
+1. **Strategy**: Platform selection, audience research
+2. **Content Planning**: Calendar, themes, topics
+3. **Creation**: Generate posts, media
+4. **Scheduling**: Automate posting times
+5. **Engagement**: Monitor, respond, interact
+6. **Analytics**: Track performance, optimize
+7. **Monetization**: Sponsorships, partnerships
+
+### Professional Performance Workflows
+
+#### Daily Work Workflow
+**Morning:**
+1. Review calendar and priorities
+2. Prepare for meetings
+3. Check task queue
+4. Allocate time blocks
+
+**During Work:**
+5. Task execution with agent assistance
+6. Meeting notes and action items
+7. Code review and collaboration
+8. Progress tracking
+
+**End of Day:**
+9. Update task status
+10. Document achievements
+11. Plan tomorrow
+12. Sync and backup
+
+#### Deliverable Creation Workflow
+
+**Code:**
+1. Requirement analysis
+2. Design and planning
+3. Implementation with AI assistance
+4. Testing and review
+5. Documentation
+6. Deployment
+
+**Presentations:**
+1. Define objective and audience
+2. Research and content gathering
+3. Outline structure
+4. Create slides with AI assistance
+5. Practice and refine
+6. Deliver and gather feedback
+
+#### Career Development Workflow
+**Monthly:**
+1. Review achievements and impact
+2. Update portfolio and resume
+3. Skill gap analysis
+4. Learning plan creation
+5. Networking activities
+6. LinkedIn content posting
+
+**Quarterly:**
+7. Performance review preparation
+8. Career path assessment
+9. Salary research
+10. Goal adjustment
+
+### Personal Improvement Workflows
+
+#### Task Management Workflow
+**Capture:**
+1. Quick capture from any channel (mobile, CLI, text)
+2. Auto-categorization and tagging
+3. Add to inbox
+
+**Process:**
+4. Review inbox daily
+5. Clarify and expand tasks
+6. Set priorities and deadlines
+7. Add to appropriate project/area
+
+**Execute:**
+8. Work from prioritized list
+9. Track time and progress
+10. Mark complete
+11. Archive
+
+**Review:**
+12. Daily: Today's tasks, tomorrow's priorities
+13. Weekly: Project progress, goal alignment
+14. Monthly: System optimization
+
+#### Habit Management Workflow
+**Setup:**
+1. Define habit and why
+2. Set frequency and trigger
+3. Configure reminders
+4. Start tracking
+
+**Daily:**
+5. Receive reminder at trigger time
+6. Complete habit
+7. Log completion
+8. View streak
+
+**Weekly Review:**
+9. Check consistency
+10. Identify obstacles
+11. Adjust if needed
+12. Celebrate wins
+
+**Monthly Analysis:**
+13. Analyze patterns
+14. Assess habit strength
+15. Consider new habits
+16. Remove unsuccessful ones
+
+#### Note Organization Workflow
+**Capture:**
+1. Quick note from any source
+2. Add to inbox
+3. Auto-timestamp
+
+**Process:**
+4. Review inbox regularly
+5. Add tags and categories
+6. Link related notes
+7. Move to organized folders
+
+**Retrieve:**
+8. Full-text search
+9. Browse by category/tag
+10. Follow links
+11. Export as needed
+
+### Personal Project Workflows
+
+#### Game Development Workflow
+**Concept Phase:**
+1. Brainstorm ideas
+2. Define core mechanics
+3. Create game design document
+4. Prototype key features
+
+**Development Phase:**
+5. Asset creation (art, sound, music)
+6. Core gameplay implementation
+7. Level/content creation
+8. Testing and iteration
+
+**Polish Phase:**
+9. Bug fixing
+10. Balancing and tuning
+11. UI/UX refinement
+12. Performance optimization
+
+**Release Phase:**
+13. Marketing prep
+14. Platform deployment
+15. Launch
+16. Post-launch support
+
+#### Music Creation Workflow
+**Composition:**
+1. Inspiration and idea capture
+2. Chord progression creation
+3. Melody development
+4. Arrangement planning
+
+**Production:**
+5. Recording/programming
+6. Sound design
+7. Mixing
+8. Mastering
+
+**Release:**
+9. Cover art and metadata
+10. Platform distribution
+11. Promotion
+12. Analytics and feedback
+
+#### Skateboarding Progression Workflow
+**Planning:**
+1. Set trick goals
+2. Create practice plan
+3. Find suitable spots
+4. Schedule sessions
+
+**Session:**
+5. Warm-up and stretching
+6. Practice target tricks
+7. Record video
+8. Log attempts and success
+
+**Review:**
+9. Analyze video footage
+10. Track progress
+11. Identify improvements
+12. Update trick list
+
+**Long-term:**
+13. Trend analysis
+14. Goal adjustment
+15. Skill progression tracking
+16. Content creation (edits, posts)
+
+### Cross-Objective Workflows
+
+#### Weekly Planning Workflow
+Integrates all objectives:
+
+**Sunday Evening Review:**
+1. Review last week's achievements (all objectives)
+2. Assess asset performance metrics
+3. Check professional goals progress
+4. Review personal habits and tasks
+5. Evaluate project milestones
+
+**Planning:**
+6. Set next week's priorities per objective
+7. Balance time across objectives
+8. Schedule key activities
+9. Identify potential conflicts
+10. Set success criteria
+
+**Preparation:**
+11. Prepare materials needed
+12. Queue tasks in system
+13. Set reminders
+14. Share calendar blocks
+
+#### Monthly Strategic Review
+**Performance Analysis:**
+1. Asset generation: Revenue, growth
+2. Professional: Achievements, skills
+3. Personal: Habits, organization
+4. Projects: Progress, completions
+
+**Insights:**
+5. Identify what's working
+6. Detect obstacles
+7. Spot opportunities
+8. Generate improvement ideas
+
+**Adjustments:**
+9. Reallocate time/resources
+10. Update strategies
+11. Set new goals
+12. Implement changes
+
 ## Best Practices
 
 ### Do's

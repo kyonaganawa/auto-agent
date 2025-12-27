@@ -12,6 +12,48 @@ The Auto-Agent System is a framework for creating and managing AI-powered agents
 - **Run continuously** - Execute Claude sessions constantly to generate value
 - **Communicate intelligently** - Multi-channel input/output for seamless interaction
 
+## Main Objectives
+
+The system serves four primary purposes:
+
+### 1. Asset Generation 💰
+**Generate economic value through digital assets**
+- Websites (content sites, SaaS, e-commerce)
+- Digital media (videos, e-books, courses)
+- Social accounts (automated content, audience building)
+- Apps (mobile, web, SaaS products)
+
+**Goal**: Create sustainable revenue streams through continuous asset development, testing, and optimization.
+
+### 2. Professional Performance 💼
+**Enhance career and job performance**
+- Organizational assistance (task management, scheduling, documentation)
+- Better work practices (code quality, time management, productivity)
+- Actual deliverables (code implementation, presentations, reports)
+- Career development (skill building, networking, branding)
+
+**Goal**: Excel in current role and advance long-term career trajectory.
+
+### 3. Personal Improvement 🌱
+**Optimize daily life and personal growth**
+- Task management (capture, prioritize, execute)
+- Habit management (tracking, reminders, analysis)
+- Note and information organization (PKM, knowledge base)
+- Self-reflection (journaling, goal tracking, insights)
+
+**Goal**: Live a more organized, productive, and fulfilling life.
+
+### 4. Personal Projects 🎮
+**Organize and advance creative pursuits**
+- Game development (indie games, prototypes)
+- Music creation (compositions, production)
+- Skateboarding (trick progression, video editing)
+- Other projects (flexible support for any endeavor)
+
+**Goal**: Make consistent progress on passion projects and creative work.
+
+> **See [OBJECTIVES.md](OBJECTIVES.md) for detailed breakdowns, workflows, and success metrics for each objective.**
+
 ## Core Principles
 
 ### 1. Owner Control
@@ -215,6 +257,7 @@ auto-agent/
 ├── ARCHITECTURE.md        # Technical architecture details
 ├── WORKFLOW.md            # Development processes
 ├── LOGGING.md             # Logging specification
+├── OBJECTIVES.md          # Detailed objectives and strategies
 ├── agents/                # Agent definitions and scripts
 │   ├── development/      # Development agents
 │   ├── planning/         # Planning agents
@@ -236,27 +279,91 @@ auto-agent/
 ├── output/                # Output channels
 │   ├── notifications/    # Pending notifications
 │   └── reports/          # Generated reports
+├── objectives/            # Objective-specific workspaces
+│   ├── assets/           # Asset generation projects
+│   │   ├── websites/    # Website projects
+│   │   ├── apps/        # Application projects
+│   │   ├── social/      # Social media management
+│   │   └── media/       # Digital media creation
+│   ├── professional/     # Professional work
+│   │   ├── deliverables/# Code, presentations, docs
+│   │   ├── career/      # Career development
+│   │   └── organization/# Task/project management
+│   ├── personal/         # Personal improvement
+│   │   ├── tasks/       # Task management
+│   │   ├── habits/      # Habit tracking
+│   │   ├── notes/       # Note organization
+│   │   └── reflection/  # Self-reflection logs
+│   └── projects/         # Personal projects
+│       ├── games/       # Game development
+│       ├── music/       # Music creation
+│       ├── skateboarding/# Skateboarding tracking
+│       └── other/       # Other projects
 ├── docs/                  # Additional documentation
 └── .git/                  # Version control
 ```
 
-## Goals
+## Goals & Roadmap
 
-### Short-term
-- Establish core system architecture
-- Implement multi-channel communication (mobile, text files)
-- Set up comprehensive logging system
-- Enable autonomous continuous operation
-- Create fundamental agents
-- Implement intelligent notification system
+### Phase 1: Foundation (Month 1-2)
+**Infrastructure**
+- ✅ Core system architecture
+- ✅ Documentation framework
+- ⏳ Multi-channel communication setup
+- ⏳ Comprehensive logging system
+- ⏳ Autonomous operation framework
 
-### Long-term
-- Build agent marketplace/library
-- Implement machine learning from execution patterns
-- Create advanced orchestration with full autonomy
-- Enable multi-agent collaboration
-- Develop predictive optimization
-- Build mobile application for seamless communication
+**Objectives**
+- 🎯 Personal improvement: Set up task and habit tracking
+- 🎯 Professional: Establish workflow assistance
+- 🎯 Asset Generation: Launch first website project
+- 🎯 Personal Projects: Begin one creative project
+
+### Phase 2: Expansion (Month 3-4)
+**Infrastructure**
+- Advanced agent capabilities
+- Mobile app integration
+- Analytics dashboard
+- Performance optimization
+
+**Objectives**
+- 🎯 Asset Generation: Launch 2-3 revenue-generating assets
+- 🎯 Professional: Automate routine work tasks
+- 🎯 Personal: Optimize daily routines
+- 🎯 Projects: Active progress on 3-5 projects
+
+### Phase 3: Optimization (Month 5-6)
+**Infrastructure**
+- Machine learning from execution patterns
+- Predictive optimization
+- Advanced orchestration
+- Cost optimization
+
+**Objectives**
+- 🎯 Asset Generation: $500/month revenue target
+- 🎯 Professional: Career advancement support
+- 🎯 Personal: 80% habit consistency
+- 🎯 Projects: Complete 1-2 major milestones
+
+### Phase 4: Scaling (Month 7-12)
+**Infrastructure**
+- Multi-project support
+- Agent marketplace
+- Plugin system
+- Advanced analytics
+
+**Objectives**
+- 🎯 Asset Generation: $2,500/month revenue target
+- 🎯 Professional: Demonstrable career impact
+- 🎯 Personal: Fully optimized life systems
+- 🎯 Projects: Published works and achievements
+
+### Long-term Vision (Year 2+)
+- Fully autonomous asset generation and management
+- AI-powered career coaching and advancement
+- Comprehensive life optimization system
+- Portfolio of successful creative projects
+- Financial independence through asset revenue
 
 ## Contributing
 

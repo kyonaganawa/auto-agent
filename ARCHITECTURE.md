@@ -6,6 +6,14 @@ This document describes the technical architecture of the Auto-Agent System.
 
 The Auto-Agent System is built on a modular, extensible architecture that enables autonomous agents to work together while maintaining clear separation of concerns.
 
+The architecture is designed to support four primary objectives:
+1. **Asset Generation**: Create revenue-generating digital assets
+2. **Professional Performance**: Enhance career and job performance
+3. **Personal Improvement**: Optimize daily life and personal growth
+4. **Personal Projects**: Advance creative and recreational pursuits
+
+See [OBJECTIVES.md](OBJECTIVES.md) for detailed objective descriptions.
+
 ## Architecture Layers
 
 ```
@@ -111,6 +119,50 @@ The Auto-Agent System is built on a modular, extensible architecture that enable
   - Format and deliver reports
   - Manage message queue priorities
 - Tools: File I/O, Messaging APIs, Notification systems
+
+#### Objective-Specific Agents
+
+**Asset Generation Agents**
+- Purpose: Create and manage revenue-generating assets
+- Capabilities:
+  - Market research and opportunity identification
+  - Website development and content generation
+  - App development and deployment
+  - Social media content creation and scheduling
+  - Digital media production
+  - Performance analytics and optimization
+- Tools: Web frameworks, CMS, social APIs, analytics tools
+
+**Professional Assistant Agents**
+- Purpose: Enhance work performance and career
+- Capabilities:
+  - Task and project management
+  - Code generation and review
+  - Presentation creation
+  - Documentation writing
+  - Meeting preparation and notes
+  - Career development planning
+- Tools: Development tools, office software, scheduling APIs
+
+**Personal Optimization Agents**
+- Purpose: Manage daily life and personal growth
+- Capabilities:
+  - Task capture and prioritization
+  - Habit tracking and reminders
+  - Note organization and retrieval
+  - Self-reflection prompts and analysis
+  - Goal tracking and progress monitoring
+- Tools: Database, notification system, analytics
+
+**Project Management Agents**
+- Purpose: Advance personal creative projects
+- Capabilities:
+  - Project planning and milestone tracking
+  - Resource and reference collection
+  - Progress monitoring
+  - Skill development guidance
+  - Creative assistance (game design, music theory, etc.)
+- Tools: Project management tools, domain-specific tools
 
 #### Agent Communication
 
@@ -396,7 +448,11 @@ auto-agent/
 │   ├── research/          # Research agents
 │   ├── review/            # Review agents
 │   ├── monitoring/        # Monitoring & analytics agents
-│   └── communication/     # I/O communication agents
+│   ├── communication/     # I/O communication agents
+│   ├── asset_generation/  # Asset creation agents
+│   ├── professional/      # Professional assistance agents
+│   ├── personal/          # Personal optimization agents
+│   └── projects/          # Project management agents
 ├── scripts/               # Automation scripts
 │   ├── setup/            # Setup and initialization
 │   ├── tasks/            # Task automation
@@ -415,6 +471,68 @@ auto-agent/
 ├── output/                # Output channels
 │   ├── notifications/    # Pending notifications
 │   └── reports/          # Generated reports
+├── objectives/            # Objective-specific workspaces
+│   ├── assets/           # Asset generation projects
+│   │   ├── websites/    # Website projects
+│   │   │   ├── active/  # Active website projects
+│   │   │   ├── deployed/# Deployed websites
+│   │   │   └── archive/ # Archived projects
+│   │   ├── apps/        # Application projects
+│   │   │   ├── mobile/  # Mobile apps
+│   │   │   ├── web/     # Web apps
+│   │   │   └── tools/   # CLI tools/utilities
+│   │   ├── social/      # Social media management
+│   │   │   ├── content/ # Content库
+│   │   │   ├── schedules/# Posting schedules
+│   │   │   └── analytics/# Performance data
+│   │   └── media/       # Digital media creation
+│   │       ├── videos/  # Video content
+│   │       ├── ebooks/  # E-books and guides
+│   │       └── courses/ # Online courses
+│   ├── professional/     # Professional work
+│   │   ├── deliverables/# Work outputs
+│   │   │   ├── code/    # Code projects
+│   │   │   ├── presentations/# Slides and decks
+│   │   │   └── documents/# Reports and docs
+│   │   ├── career/      # Career development
+│   │   │   ├── portfolio/# Portfolio items
+│   │   │   ├── networking/# Contacts and events
+│   │   │   └── learning/# Skill development
+│   │   └── organization/# Daily work management
+│   │       ├── tasks/   # Work task tracking
+│   │       ├── projects/# Project management
+│   │       └── meetings/# Meeting notes
+│   ├── personal/         # Personal improvement
+│   │   ├── tasks/       # Personal task management
+│   │   │   ├── active/  # Current tasks
+│   │   │   ├── recurring/# Recurring tasks
+│   │   │   └── completed/# Task history
+│   │   ├── habits/      # Habit tracking
+│   │   │   ├── tracking/# Daily tracking data
+│   │   │   ├── analytics/# Habit analytics
+│   │   │   └── templates/# Habit templates
+│   │   ├── notes/       # Note organization
+│   │   │   ├── inbox/   # Quick captures
+│   │   │   ├── organized/# Categorized notes
+│   │   │   └── archive/ # Old notes
+│   │   └── reflection/  # Self-reflection
+│   │       ├── daily/   # Daily journals
+│   │       ├── weekly/  # Weekly reviews
+│   │       └── monthly/ # Monthly reflections
+│   └── projects/         # Personal projects
+│       ├── games/       # Game development
+│       │   ├── prototypes/# Game prototypes
+│       │   ├── active/  # Active development
+│       │   └── published/# Released games
+│       ├── music/       # Music creation
+│       │   ├── compositions/# Music files
+│       │   ├── projects/# DAW projects
+│       │   └── released/# Published music
+│       ├── skateboarding/# Skateboarding
+│       │   ├── tricks/  # Trick progression
+│       │   ├── sessions/# Session logs
+│       │   └── videos/  # Video content
+│       └── other/       # Other projects
 ├── docs/                  # Documentation
 │   ├── guides/           # User guides
 │   ├── api/              # API documentation
@@ -423,10 +541,13 @@ auto-agent/
 │   ├── agents.json       # Agent configurations
 │   ├── workflows.json    # Workflow definitions
 │   ├── notifications.json # Notification rules
+│   ├── objectives.json   # Objective tracking
 │   └── settings.json     # System settings
 ├── state/                 # Runtime state
 │   ├── tasks.json        # Active task state
 │   ├── queue.json        # Task queue state
+│   ├── habits.json       # Habit tracking state
+│   ├── projects.json     # Project states
 │   └── history.json      # Execution history
 └── tests/                 # Test suites
     ├── unit/             # Unit tests
