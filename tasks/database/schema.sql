@@ -241,6 +241,9 @@ CREATE TABLE task_templates (
   use_count INTEGER DEFAULT 0,
   last_used_at TIMESTAMP WITH TIME ZONE,
 
+  -- Metadata (for storing execution_type and other config)
+  metadata JSONB,
+
   -- Audit
   created_by UUID,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
