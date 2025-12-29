@@ -65,18 +65,32 @@ The task system provides a comprehensive workflow for creating, approving, and e
 
 ## Quick Start
 
+### Prerequisites
+
+Before using the task system, you need:
+- **Supabase account and project** - See [Complete Supabase Setup Guide](docs/SUPABASE_SETUP.md)
+- **Python 3.8+** - For task executor
+- **Node.js 18+** - For dashboard
+
 ### 1. Set Up Supabase
 
-```bash
-# Create new Supabase project at https://supabase.com
+**📖 Complete setup guide:** [docs/SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md)
 
-# Copy connection details
-export SUPABASE_URL="your-project-url"
+**Quick setup (if you already have Supabase):**
+
+```bash
+# Set environment variables
+export SUPABASE_URL="https://your-project.supabase.co"
 export SUPABASE_ANON_KEY="your-anon-key"
 export SUPABASE_SERVICE_KEY="your-service-key"
 
-# Run database schema
-psql -h your-db-host -U postgres -f tasks/database/schema.sql
+# Run migrations
+supabase db push --file tasks/database/schema.sql
+supabase db push --file tasks/database/migration_001_execution_type.sql
+supabase db push --file tasks/database/migration_002_paused_suggested_assignee.sql
+
+# Test connection
+python3 test_supabase.py
 ```
 
 ### 2. Install Dependencies
@@ -90,7 +104,20 @@ cd tasks/dashboard
 npm install
 ```
 
-### 3. Start the Dashboard
+### 3. Create Your First Task
+
+```bash
+# Create a test task
+python3 create_test_task.py
+
+# Approve the task
+python3 approve_task.py <task-id>
+
+# Execute the task
+python3 tasks/integration/task_executor.py
+```
+
+### 4. Start the Dashboard
 
 ```bash
 cd tasks/dashboard
@@ -99,26 +126,28 @@ npm run dev
 # Open http://localhost:5173
 ```
 
-### 4. Start Task Executor
+### 5. Run Continuous Execution (Optional)
 
 ```bash
-# One-time execution
-python tasks/integration/task_executor.py
-
 # Continuous polling (every 60 seconds)
-python tasks/integration/task_executor.py --continuous --interval 60
+python3 tasks/integration/task_executor.py --continuous --interval 60
 ```
 
-### 5. Create Your First Task
+---
 
-Via Dashboard:
-- Click "New Task"
-- Fill in title, description, and select system
-- Submit for approval
-- Approve the task
-- Task executes automatically
+## Creating Tasks
 
-Via API:
+### Via Dashboard
+
+1. Open http://localhost:5173
+2. Click "New Task"
+3. Fill in title, description, and prompt
+4. Select execution system and type
+5. Submit for approval
+6. Approve the task
+7. Task executes automatically
+
+### Via API
 ```typescript
 import { taskService } from './tasks/services/task.service';
 
