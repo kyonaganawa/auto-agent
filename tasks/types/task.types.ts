@@ -9,9 +9,11 @@
 
 export enum TaskStatus {
   DRAFT = 'draft',
+  SUGGESTED = 'suggested',
   PENDING_APPROVAL = 'pending_approval',
   NEEDS_REFINEMENT = 'needs_refinement',
   APPROVED = 'approved',
+  PAUSED = 'paused',
   IN_PROGRESS = 'in_progress',
   COMPLETED = 'completed',
   FAILED = 'failed',
@@ -66,6 +68,12 @@ export enum CommentType {
   SYSTEM = 'system',
 }
 
+export enum AssigneeType {
+  SYSTEM = 'system',                    // Automated system/agent execution
+  HUMAN_OWNER = 'human_owner',          // Owner should execute
+  HUMAN_THIRD_PARTY = 'human_third_party',  // Third party human should execute
+}
+
 // ============================================
 // CORE INTERFACES
 // ============================================
@@ -97,6 +105,11 @@ export interface Task {
   created_by: CreatorType;
   created_by_user_id?: string | null;
   created_by_agent?: string | null;
+
+  // Assignee tracking
+  assigned_to_type: AssigneeType;
+  assigned_to_user_id?: string | null;
+  assigned_to_name?: string | null;
 
   // Recurrence
   recurrence: TaskRecurrence;
@@ -299,6 +312,9 @@ export interface CreateTaskDTO {
   metadata?: Record<string, any>;
   created_by?: CreatorType;
   created_by_agent?: string;
+  assigned_to_type?: AssigneeType;
+  assigned_to_user_id?: string;
+  assigned_to_name?: string;
 }
 
 export interface UpdateTaskDTO {
@@ -474,8 +490,8 @@ export interface TaskNotification {
 export type TaskStatusGroup = 'pending' | 'active' | 'completed' | 'failed';
 
 export const TASK_STATUS_GROUPS: Record<TaskStatusGroup, TaskStatus[]> = {
-  pending: [TaskStatus.DRAFT, TaskStatus.PENDING_APPROVAL, TaskStatus.NEEDS_REFINEMENT],
-  active: [TaskStatus.APPROVED, TaskStatus.IN_PROGRESS],
+  pending: [TaskStatus.DRAFT, TaskStatus.SUGGESTED, TaskStatus.PENDING_APPROVAL, TaskStatus.NEEDS_REFINEMENT],
+  active: [TaskStatus.APPROVED, TaskStatus.PAUSED, TaskStatus.IN_PROGRESS],
   completed: [TaskStatus.COMPLETED],
   failed: [TaskStatus.FAILED, TaskStatus.CANCELLED, TaskStatus.BLOCKED],
 };
@@ -506,9 +522,11 @@ export const PRIORITY_COLORS: Record<TaskPriority, string> = {
 
 export const STATUS_COLORS: Record<TaskStatus, string> = {
   [TaskStatus.DRAFT]: '#9CA3AF',              // gray-400
+  [TaskStatus.SUGGESTED]: '#8B5CF6',          // violet-500
   [TaskStatus.PENDING_APPROVAL]: '#F59E0B',   // amber-500
   [TaskStatus.NEEDS_REFINEMENT]: '#EF4444',   // red-500
   [TaskStatus.APPROVED]: '#10B981',           // green-500
+  [TaskStatus.PAUSED]: '#6366F1',             // indigo-500
   [TaskStatus.IN_PROGRESS]: '#3B82F6',        // blue-500
   [TaskStatus.COMPLETED]: '#059669',          // green-600
   [TaskStatus.FAILED]: '#DC2626',             // red-600

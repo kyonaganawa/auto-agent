@@ -319,6 +319,101 @@ export class TaskService {
   }
 
   /**
+   * Approve a suggested task (move from suggested to pending_approval)
+   */
+  async approveSuggestion(id: string, userId: string): Promise<ApiResponse<Task>> {
+    try {
+      const { data: task, error } = await this.supabase
+        .from('tasks')
+        .update({
+          status: 'pending_approval',
+        })
+        .eq('id', id)
+        .eq('status', 'suggested')
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      // Add comment noting approval of suggestion
+      await this.addComment(id, {
+        comment: 'AI suggestion approved by owner',
+        comment_type: 'approval',
+        author_type: 'human',
+        author_user_id: userId,
+      });
+
+      return { data: task };
+    } catch (error: any) {
+      return { error: { message: error.message } };
+    }
+  }
+
+  /**
+   * Pause a task (move from approved or in_progress to paused)
+   */
+  async pauseTask(id: string, userId: string, reason?: string): Promise<ApiResponse<Task>> {
+    try {
+      const { data: task, error } = await this.supabase
+        .from('tasks')
+        .update({
+          status: 'paused',
+        })
+        .eq('id', id)
+        .in('status', ['approved', 'in_progress'])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      // Add comment if reason provided
+      if (reason) {
+        await this.addComment(id, {
+          comment: `Task paused: ${reason}`,
+          comment_type: 'system',
+          author_type: 'human',
+          author_user_id: userId,
+        });
+      }
+
+      return { data: task };
+    } catch (error: any) {
+      return { error: { message: error.message } };
+    }
+  }
+
+  /**
+   * Resume a paused task (move from paused to approved)
+   */
+  async resumeTask(id: string, userId: string): Promise<ApiResponse<Task>> {
+    try {
+      const { data: task, error } = await this.supabase
+        .from('tasks')
+        .update({
+          status: 'approved',
+        })
+        .eq('id', id)
+        .eq('status', 'paused')
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      // Add comment noting resumption
+      await this.addComment(id, {
+        comment: 'Task resumed',
+        comment_type: 'system',
+        author_type: 'human',
+        author_user_id: userId,
+      });
+
+      return { data: task };
+    } catch (error: any) {
+      return { error: { message: error.message } };
+    }
+  }
+
+  /**
    * Execute a task (start execution)
    */
   async executeTask(id: string, executedBy?: string): Promise<ApiResponse<Task>> {

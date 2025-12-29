@@ -46,7 +46,14 @@ class TaskExecutor:
         logger.info("Task executor initialized")
 
     def get_next_task(self) -> Optional[Dict[str, Any]]:
-        """Get next task from execution queue"""
+        """Get next task from execution queue
+
+        Only fetches tasks with status='approved'. This excludes:
+        - paused: Temporarily halted tasks
+        - suggested: AI suggestions awaiting owner approval
+        - draft: Tasks being created
+        - pending_approval: Tasks awaiting approval
+        """
         try:
             response = self.supabase.table('tasks').select('*').eq(
                 'status', 'approved'

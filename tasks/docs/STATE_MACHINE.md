@@ -5,54 +5,62 @@ Complete state machine specification for the Auto-Agent task system.
 ## State Diagram
 
 ```
-┌─────────┐
-│  DRAFT  │ (User creating/editing task)
-└────┬────┘
-     │ submit()
-     ▼
-┌─────────────────┐
-│ PENDING_APPROVAL│ (Awaiting user approval)
-└────┬───┬────┬───┘
-     │   │    │ approve()
-     │   │    ├─────────┐
-     │   │    │         ▼
-     │   │    │    ┌──────────┐
-     │   │    │    │ APPROVED │ (Ready to execute)
-     │   │    │    └────┬─────┘
-     │   │    │         │ execute()
-     │   │    │         ▼
-     │   │    │    ┌─────────────┐
-     │   │    │    │ IN_PROGRESS │ (Currently executing)
-     │   │    │    └──┬────┬─────┘
-     │   │    │       │    │
-     │   │    │       │    │ fail()
-     │   │    │       │    └──────┐
-     │   │    │       │           ▼
-     │   │    │       │      ┌────────┐
-     │   │    │       │      │ FAILED │
-     │   │    │       │      └────────┘
-     │   │    │       │
-     │   │    │       │ complete()
-     │   │    │       ▼
-     │   │    │  ┌───────────┐
-     │   │    │  │ COMPLETED │
-     │   │    │  └───────────┘
-     │   │    │
-     │   │    │ cancel()
-     │   │    └──────────┐
-     │   │               ▼
-     │   │          ┌───────────┐
-     │   │          │ CANCELLED │
-     │   │          └───────────┘
-     │   │
-     │   │ request_refinement()
-     │   ▼
-     │ ┌──────────────────┐
-     │ │ NEEDS_REFINEMENT │ (Rejected, needs more detail)
-     │ └────────┬─────────┘
-     │          │ refine()
-     │          │
-     └──────────┘ (loops back to PENDING_APPROVAL)
+┌─────────┐                    ┌───────────┐
+│  DRAFT  │                    │ SUGGESTED │ (AI suggested, needs owner approval)
+└────┬────┘                    └─────┬─────┘
+     │ submit()                      │ approve_suggestion()
+     │                               │
+     │                               ▼
+     │                         ┌─────────────────┐
+     └────────────────────────>│ PENDING_APPROVAL│ (Awaiting user approval)
+                               └────┬───┬────┬───┘
+                                    │   │    │ approve()
+                                    │   │    ├─────────┐
+                                    │   │    │         ▼
+                                    │   │    │    ┌──────────┐
+                                    │   │    │    │ APPROVED │◄──────┐
+                                    │   │    │    └────┬─────┘       │
+                                    │   │    │         │ pause()     │ resume()
+                                    │   │    │         ▼             │
+                                    │   │    │    ┌────────┐         │
+                                    │   │    │    │ PAUSED │─────────┘
+                                    │   │    │    └────────┘
+                                    │   │    │
+                                    │   │    │    (APPROVED executes)
+                                    │   │    │         │ execute()
+                                    │   │    │         ▼
+                                    │   │    │    ┌─────────────┐
+                                    │   │    │    │ IN_PROGRESS │ (Currently executing)
+                                    │   │    │    └──┬────┬─────┘
+                                    │   │    │       │    │
+                                    │   │    │       │    │ fail()
+                                    │   │    │       │    └──────┐
+                                    │   │    │       │           ▼
+                                    │   │    │       │      ┌────────┐
+                                    │   │    │       │      │ FAILED │
+                                    │   │    │       │      └────────┘
+                                    │   │    │       │
+                                    │   │    │       │ complete()
+                                    │   │    │       ▼
+                                    │   │    │  ┌───────────┐
+                                    │   │    │  │ COMPLETED │
+                                    │   │    │  └───────────┘
+                                    │   │    │
+                                    │   │    │ cancel()
+                                    │   │    └──────────┐
+                                    │   │               ▼
+                                    │   │          ┌───────────┐
+                                    │   │          │ CANCELLED │
+                                    │   │          └───────────┘
+                                    │   │
+                                    │   │ request_refinement()
+                                    │   ▼
+                                    │ ┌──────────────────┐
+                                    │ │ NEEDS_REFINEMENT │ (Rejected, needs more detail)
+                                    │ └────────┬─────────┘
+                                    │          │ refine()
+                                    │          │
+                                    └──────────┘ (loops back to PENDING_APPROVAL)
 ```
 
 ## States
@@ -71,6 +79,36 @@ Complete state machine specification for the Auto-Agent task system.
 **Allowed by:** Human users only
 
 **Next states:** `pending_approval`, deleted
+
+---
+
+### suggested
+**Description:** AI agent suggested a task outside usual routines, awaiting owner approval.
+
+**Entry conditions:**
+- Agent identifies opportunity outside normal patterns
+- Agent creates task with `suggested` status
+- Agent believes task would benefit user but needs confirmation
+
+**Exit conditions:**
+- Owner approves suggestion (`approve_suggestion()`) → transitions to `pending_approval`
+- Owner rejects suggestion (`cancel()`) → transitions to `cancelled`
+- Owner requests more detail (`request_refinement()`) → transitions to `needs_refinement`
+
+**Allowed by:** Agents only (created by AI agents)
+
+**Next states:** `pending_approval`, `needs_refinement`, `cancelled`
+
+**Business rules:**
+- Only for tasks outside predefined routines/templates
+- Requires explicit owner approval (no auto-approval)
+- Should include clear rationale in description
+- Higher threshold than normal task creation
+
+**Example scenarios:**
+- Agent notices competitor ranking higher on key terms → suggests SEO analysis
+- Agent detects unused features in codebase → suggests cleanup task
+- Agent identifies optimization opportunity → suggests refactoring
 
 ---
 
@@ -127,20 +165,52 @@ Complete state machine specification for the Auto-Agent task system.
 - User approves from `pending_approval`
 - Auto-approval rule triggered
 - Task auto-approved via `is_pre_approved` flag
+- Task resumed from `paused`
 
 **Exit conditions:**
 - System begins execution (`execute()`)
+- User pauses task (`pause()`)
 - Task is cancelled before execution
 - Task becomes blocked by dependencies
 
 **Allowed by:** System, autonomous agents
 
-**Next states:** `in_progress`, `cancelled`, `blocked`
+**Next states:** `in_progress`, `paused`, `cancelled`, `blocked`
 
 **Business rules:**
 - Tasks execute in priority order (critical → backlog)
 - Scheduled tasks wait until `scheduled_for` time
 - Tasks with dependencies wait until dependencies complete
+- Only `approved` tasks appear in execution queue (not `paused`)
+
+---
+
+### paused
+**Description:** Task is approved but temporarily halted. Will not execute until resumed.
+
+**Entry conditions:**
+- User pauses task from `approved` or `in_progress`
+- Temporary hold on execution (e.g., waiting for external dependency)
+
+**Exit conditions:**
+- User resumes task (`resume()`) → returns to `approved`
+- Task is cancelled
+
+**Allowed by:** Human users only
+
+**Next states:** `approved`, `cancelled`
+
+**Business rules:**
+- Task exists but is excluded from execution queue
+- Can be resumed at any time
+- Useful for temporarily deferring tasks without deleting them
+- Maintains all task context and configuration
+
+**Example scenarios:**
+- Waiting for third party to complete prerequisite
+- Deferring non-urgent task due to higher priorities
+- Temporarily holding recurring task during vacation
+- Pausing deployment during code freeze
 
 ---
 
@@ -304,6 +374,47 @@ Complete state machine specification for the Auto-Agent task system.
 **Side effects:**
 - Clear `refinement_notes`
 - Notify approver that task is ready for re-review
+
+---
+
+### approve_suggestion()
+**From:** `suggested`
+**To:** `pending_approval`
+**Trigger:** Owner approves AI-suggested task
+**Validation:**
+- User is the owner
+- Task has clear description and rationale
+**Side effects:**
+- Add comment noting approval of suggestion
+- Transition to normal approval workflow
+- May trigger auto-approval rules
+
+---
+
+### pause()
+**From:** `approved` or `in_progress`
+**To:** `paused`
+**Trigger:** User temporarily halts task execution
+**Validation:**
+- User has pause permissions
+- Task is not in terminal state
+**Side effects:**
+- Remove from execution queue
+- Preserve all task context
+- Add comment noting pause reason (optional)
+
+---
+
+### resume()
+**From:** `paused`
+**To:** `approved`
+**Trigger:** User resumes paused task
+**Validation:**
+- User has resume permissions
+**Side effects:**
+- Add back to execution queue
+- Restore original priority and scheduling
+- Add comment noting resumption (optional)
 
 ---
 
