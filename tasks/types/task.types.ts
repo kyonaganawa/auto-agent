@@ -45,6 +45,12 @@ export enum ExecutionSystem {
   CUSTOM = 'custom',
 }
 
+export enum ExecutionType {
+  CLAUDE_SESSION = 'claude_session',  // Execute via Claude Code with prompt
+  SCRIPT = 'script',                  // Execute pre-created script
+  HYBRID = 'hybrid',                  // Script that calls Claude Code
+}
+
 export enum CreatorType {
   HUMAN = 'human',
   AGENT_AUTONOMOUS = 'agent_autonomous',
@@ -76,6 +82,12 @@ export interface Task {
   // System and execution
   system: ExecutionSystem;
   custom_system?: string | null;
+
+  // Execution type and configuration
+  execution_type: ExecutionType;
+  script_path?: string | null;      // Path to script (for script/hybrid)
+  script_args?: Record<string, any> | null;  // Arguments for script
+  timeout_seconds: number;           // Execution timeout
 
   // Status and workflow
   status: TaskStatus;
@@ -271,6 +283,10 @@ export interface CreateTaskDTO {
   prompt?: string;
   system: ExecutionSystem;
   custom_system?: string;
+  execution_type?: ExecutionType;
+  script_path?: string;
+  script_args?: Record<string, any>;
+  timeout_seconds?: number;
   priority?: TaskPriority;
   recurrence?: TaskRecurrence;
   recurrence_pattern?: string;

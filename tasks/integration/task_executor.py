@@ -90,94 +90,33 @@ class TaskExecutor:
             return False
 
     def execute_task(self, task: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute a task based on its system"""
+        """Execute a task based on its execution type"""
         task_id = task['id']
-        system = task['system']
-        prompt = task.get('prompt', task['description'])
+        execution_type = task.get('execution_type', 'claude_session')
+        timeout = task.get('timeout_seconds', 3600)
 
-        logger.info(f"Executing task {task_id} on system {system}")
+        logger.info(f"Executing task {task_id}")
         logger.info(f"Title: {task['title']}")
+        logger.info(f"Execution type: {execution_type}")
 
         # Create log file
         log_file = LOGS_DIR / f"task_{task_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
 
         try:
-            # Determine which script to run
-            if system == 'autonomous_agent':
-                script = PROJECT_ROOT / 'scripts' / 'autonomous_run.sh'
-            elif system == 'asset_generator':
-                script = PROJECT_ROOT / 'scripts' / 'asset_generator_agent.sh'
-                # Determine mode from prompt or metadata
-                mode = task.get('metadata', {}).get('mode', 'check')
-                prompt = f"Mode: {mode}\n{prompt}"
-            elif system == 'professional':
-                script = PROJECT_ROOT / 'scripts' / 'daily_agent.sh'
-            else:
-                # Custom system or direct execution
-                script = task.get('custom_system')
-
-            if not script or not Path(script).exists():
-                raise ValueError(f"Script not found for system: {system}")
-
-            # Execute with Claude Code
-            cmd = [
-                'claude',
-                '-p',
-                prompt,
-                '--add-dir', str(PROJECT_ROOT),
-                '--allowedTools', 'Bash,Read,Write,Edit,Glob,Grep,TodoWrite',
-                '--max-turns', '10',
-                '--output-format', 'json'
-            ]
-
-            # Add system-specific arguments
-            if system == 'asset_generator':
-                cmd.extend(['--max-turns', '15'])
-
-            # Execute
-            with open(log_file, 'w') as log:
-                result = subprocess.run(
-                    cmd,
-                    stdout=log,
-                    stderr=subprocess.STDOUT,
-                    timeout=3600,  # 1 hour timeout
-                    text=True
-                )
-
-            # Parse output
-            with open(log_file, 'r') as log:
-                output = log.read()
-
-            # Extract JSON if present
-            output_data = None
-            try:
-                # Try to find JSON in output
-                if '{"' in output:
-                    json_start = output.find('{"')
-                    json_end = output.rfind('}') + 1
-                    output_data = json.loads(output[json_start:json_end])
-            except:
-                pass
-
-            # Determine success
-            success = result.returncode == 0
-
-            return {
-                'success': success,
-                'exit_code': result.returncode,
-                'log_path': str(log_file),
-                'output_data': output_data,
-                'output_summary': output[:500] if output else None,  # First 500 chars
-            }
+            if execution_type == 'script':
+                return self._execute_script(task, log_file, timeout)
+            elif execution_type == 'hybrid':
+                return self._execute_hybrid(task, log_file, timeout)
+            else:  # claude_session
+                return self._execute_claude_session(task, log_file, timeout)
 
         except subprocess.TimeoutExpired:
-            logger.error(f"Task {task_id} timed out")
+            logger.error(f"Task {task_id} timed out after {timeout}s")
             return {
                 'success': False,
-                'error': 'Task execution timed out after 1 hour',
+                'error': f'Task execution timed out after {timeout} seconds',
                 'log_path': str(log_file),
             }
-
         except Exception as e:
             logger.error(f"Task {task_id} execution failed: {e}")
             return {
@@ -185,6 +124,152 @@ class TaskExecutor:
                 'error': str(e),
                 'log_path': str(log_file),
             }
+
+    def _execute_script(self, task: Dict[str, Any], log_file: Path, timeout: int) -> Dict[str, Any]:
+        """Execute a pre-created script"""
+        script_path = task.get('script_path')
+        script_args = task.get('script_args', {})
+
+        if not script_path:
+            raise ValueError("script_path is required for script execution")
+
+        # Resolve script path (absolute or relative to project root)
+        if not script_path.startswith('/'):
+            script_path = PROJECT_ROOT / script_path
+
+        script_path = Path(script_path)
+
+        if not script_path.exists():
+            raise ValueError(f"Script not found: {script_path}")
+
+        logger.info(f"Executing script: {script_path}")
+        logger.info(f"Arguments: {script_args}")
+
+        # Build command
+        cmd = [str(script_path)]
+
+        # Add arguments
+        for key, value in script_args.items():
+            cmd.append(str(value))
+
+        # Execute script
+        with open(log_file, 'w') as log:
+            result = subprocess.run(
+                cmd,
+                stdout=log,
+                stderr=subprocess.STDOUT,
+                timeout=timeout,
+                text=True,
+                cwd=PROJECT_ROOT
+            )
+
+        # Read output
+        with open(log_file, 'r') as log:
+            output = log.read()
+
+        return {
+            'success': result.returncode == 0,
+            'exit_code': result.returncode,
+            'log_path': str(log_file),
+            'output_summary': output[:500] if output else None,
+        }
+
+    def _execute_claude_session(self, task: Dict[str, Any], log_file: Path, timeout: int) -> Dict[str, Any]:
+        """Execute via Claude Code with prompt"""
+        system = task['system']
+        prompt = task.get('prompt', task['description'])
+
+        logger.info(f"Executing Claude Code session for system: {system}")
+
+        # Execute with Claude Code
+        cmd = [
+            'claude',
+            '-p',
+            prompt,
+            '--add-dir', str(PROJECT_ROOT),
+            '--allowedTools', 'Bash,Read,Write,Edit,Glob,Grep,TodoWrite',
+            '--max-turns', '10',
+            '--output-format', 'json'
+        ]
+
+        # Add system-specific arguments
+        if system == 'asset_generator':
+            cmd.extend(['--max-turns', '15'])
+
+        # Execute
+        with open(log_file, 'w') as log:
+            result = subprocess.run(
+                cmd,
+                stdout=log,
+                stderr=subprocess.STDOUT,
+                timeout=timeout,
+                text=True
+            )
+
+        # Parse output
+        with open(log_file, 'r') as log:
+            output = log.read()
+
+        # Extract JSON if present
+        output_data = None
+        try:
+            if '{"' in output:
+                json_start = output.find('{"')
+                json_end = output.rfind('}') + 1
+                output_data = json.loads(output[json_start:json_end])
+        except:
+            pass
+
+        return {
+            'success': result.returncode == 0,
+            'exit_code': result.returncode,
+            'log_path': str(log_file),
+            'output_data': output_data,
+            'output_summary': output[:500] if output else None,
+        }
+
+    def _execute_hybrid(self, task: Dict[str, Any], log_file: Path, timeout: int) -> Dict[str, Any]:
+        """Execute script first, then Claude Code session"""
+        logger.info("Executing hybrid: script + Claude session")
+
+        # Step 1: Execute script
+        script_result = self._execute_script(task, log_file, timeout // 2)
+
+        if not script_result['success']:
+            return script_result  # Script failed, return early
+
+        # Step 2: Execute Claude session if prompt provided
+        prompt = task.get('prompt')
+        if prompt:
+            # Append script output to prompt
+            with open(log_file, 'r') as log:
+                script_output = log.read()
+
+            enhanced_prompt = f"{prompt}\n\nScript output:\n{script_output[-1000:]}"  # Last 1000 chars
+
+            # Create new task dict for Claude session
+            claude_task = {
+                **task,
+                'prompt': enhanced_prompt,
+            }
+
+            # Execute Claude session (append to same log)
+            with open(log_file, 'a') as log:
+                log.write('\n\n' + '='*80 + '\n')
+                log.write('CLAUDE CODE SESSION\n')
+                log.write('='*80 + '\n\n')
+
+            claude_result = self._execute_claude_session(claude_task, log_file, timeout // 2)
+
+            return {
+                'success': claude_result['success'],
+                'exit_code': claude_result.get('exit_code', 0),
+                'log_path': str(log_file),
+                'output_data': claude_result.get('output_data'),
+                'output_summary': claude_result.get('output_summary'),
+            }
+
+        return script_result
 
     def mark_completed(self, task_id: str, result: Dict[str, Any]) -> bool:
         """Mark task as completed"""
