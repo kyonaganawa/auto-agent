@@ -1,4 +1,3 @@
-import React from 'react';
 import { TaskDashboard } from './components/TaskDashboard';
 import './styles/global.css';
 

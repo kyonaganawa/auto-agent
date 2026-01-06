@@ -136,7 +136,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ onTaskClick, refreshTr
         <div className="loading-spinner"></div>
         <p>Loading tasks...</p>
 
-        <style jsx>{`
+        <style>{`
           .kanban-loading {
             display: flex;
             flex-direction: column;
