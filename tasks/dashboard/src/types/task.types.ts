@@ -225,3 +225,47 @@ export interface ApiError {
   code?: string;
   details?: any;
 }
+
+// ============================================
+// CONSTANTS AND HELPERS
+// ============================================
+
+export const PRIORITY_COLORS: Record<TaskPriority, string> = {
+  critical: '#DC2626',  // red-600
+  high: '#EA580C',      // orange-600
+  medium: '#CA8A04',    // yellow-600
+  low: '#16A34A',       // green-600
+  backlog: '#6B7280',   // gray-500
+};
+
+export const PRIORITY_LABELS: Record<TaskPriority, string> = {
+  critical: 'P0 - Critical',
+  high: 'P1 - High',
+  medium: 'P2 - Medium',
+  low: 'P3 - Low',
+  backlog: 'P4 - Backlog',
+};
+
+export const STATUS_COLORS: Record<TaskStatus, string> = {
+  draft: '#9CA3AF',              // gray-400
+  suggested: '#8B5CF6',          // violet-500
+  pending_approval: '#F59E0B',   // amber-500
+  needs_refinement: '#EF4444',   // red-500
+  approved: '#10B981',           // green-500
+  paused: '#6366F1',             // indigo-500
+  in_progress: '#3B82F6',        // blue-500
+  review: '#A855F7',             // purple-500
+  completed: '#059669',          // green-600
+  failed: '#DC2626',             // red-600
+  cancelled: '#6B7280',          // gray-500
+  blocked: '#F97316',            // orange-500
+};
+
+export const SYSTEM_ICONS: Record<ExecutionSystem, string> = {
+  autonomous_agent: '🤖',
+  asset_generator: '💰',
+  professional: '💼',
+  personal: '🌱',
+  projects: '🎮',
+  custom: '⚙️',
+};

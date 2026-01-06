@@ -5,13 +5,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { noteService } from '../lib/noteService';
-import type { Note, NoteFilters } from '../../../../types/note.types';
+import type { Note, NoteFilters } from '../types/note.types';
 
-interface NotesPanelProps {
-  onNoteClick?: (note: Note) => void;
-}
-
-export const NotesPanel: React.FC<NotesPanelProps> = ({ onNoteClick }) => {
+export const NotesPanel: React.FC = () => {
   const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'unprocessed' | 'processed'>('all');
@@ -23,6 +19,7 @@ export const NotesPanel: React.FC<NotesPanelProps> = ({ onNoteClick }) => {
   // Load notes
   useEffect(() => {
     loadNotes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter]);
 
   const loadNotes = async () => {

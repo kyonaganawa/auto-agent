@@ -1,5 +1,5 @@
 import React from 'react';
-import { Task, STATUS_COLORS, PRIORITY_COLORS, SYSTEM_ICONS } from '../types/task.types';
+import { Task, SYSTEM_ICONS } from '../types/task.types';
 import { StatusBadge } from './StatusBadge';
 import { PriorityBadge } from './PriorityBadge';
 

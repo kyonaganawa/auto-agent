@@ -14,7 +14,7 @@ import {
 } from '@dnd-kit/core';
 import { KanbanColumn } from './KanbanColumn';
 import { taskService } from '../lib/taskService';
-import type { Task } from '../../../../tasks/types/task.types';
+import type { Task, TaskStatus } from '../types/task.types';
 
 interface KanbanBoardProps {
   onTaskClick?: (task: Task) => void;
@@ -117,7 +117,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ onTaskClick, refreshTr
 
     // Update in database
     try {
-      await taskService.updateTaskStatus(taskId, newStatus);
+      await taskService.updateTaskStatus(taskId, newStatus as TaskStatus);
     } catch (error) {
       console.error('Failed to update task status:', error);
       // Revert on error
@@ -126,7 +126,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ onTaskClick, refreshTr
   };
 
   // Group tasks by status
-  const getTasksByStatus = (status: string): Task[] => {
+  const getTasksByStatus = (status: TaskStatus): Task[] => {
     return tasks.filter((task) => task.status === status);
   };
 
@@ -190,7 +190,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ onTaskClick, refreshTr
               key={column.status}
               title={column.title}
               status={column.status}
-              tasks={getTasksByStatus(column.status)}
+              tasks={getTasksByStatus(column.status as TaskStatus)}
               color={column.color}
               onTaskClick={onTaskClick}
             />

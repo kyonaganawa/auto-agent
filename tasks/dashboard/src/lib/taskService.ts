@@ -174,6 +174,36 @@ export class TaskService {
   }
 
   /**
+   * Get task statistics
+   */
+  async getStatistics() {
+    try {
+      const { data: tasks, error } = await supabase
+        .from('tasks')
+        .select('status, priority');
+
+      if (error) throw error;
+
+      const stats = {
+        total: tasks?.length || 0,
+        by_status: {} as Record<string, number>,
+        by_priority: {} as Record<string, number>,
+      };
+
+      tasks?.forEach((task: any) => {
+        // Count by status
+        stats.by_status[task.status] = (stats.by_status[task.status] || 0) + 1;
+        // Count by priority
+        stats.by_priority[task.priority] = (stats.by_priority[task.priority] || 0) + 1;
+      });
+
+      return { data: stats };
+    } catch (error: any) {
+      return { error: { message: error.message } };
+    }
+  }
+
+  /**
    * Subscribe to task changes
    */
   subscribeToTasks(callback: (task: Task, event: 'INSERT' | 'UPDATE' | 'DELETE') => void) {

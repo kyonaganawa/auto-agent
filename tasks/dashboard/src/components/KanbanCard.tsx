@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { useDraggable } from '@dnd-kit/core';
-import type { Task} from '../../../../tasks/types/task.types';
+import type { Task } from '../types/task.types';
 
 interface KanbanCardProps {
   task: Task;

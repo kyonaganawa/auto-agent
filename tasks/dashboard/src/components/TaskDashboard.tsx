@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { taskService } from '../lib/taskService';
-import type { Task, TaskFilters, TaskStatus, TaskPriority } from '../types/task.types';
+import type { Task, TaskFilters } from '../types/task.types';
 import { TaskList } from './TaskList';
 import { TaskDetail } from './TaskDetail';
 import { TaskForm } from './TaskForm';
@@ -46,7 +46,7 @@ export const TaskDashboard: React.FC = () => {
       }
 
       if (result.data) {
-        setTasks('data' in result ? result.data : result.data);
+        setTasks(result.data);
       }
     } catch (error) {
       console.error('Failed to load tasks:', error);

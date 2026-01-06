@@ -6,7 +6,7 @@
 import React from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { KanbanCard } from './KanbanCard';
-import type { Task } from '../../../../tasks/types/task.types';
+import type { Task } from '../types/task.types';
 
 interface KanbanColumnProps {
   title: string;
