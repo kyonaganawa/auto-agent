@@ -9,7 +9,6 @@ import type { Task, TaskFilters } from '../types/task.types';
 import { TaskList } from './TaskList';
 import { TaskDetail } from './TaskDetail';
 import { TaskForm } from './TaskForm';
-import { DashboardStats } from './DashboardStats';
 import { FilterPanel } from './FilterPanel';
 import { NotesPanel } from './NotesPanel';
 import { KanbanBoard } from './KanbanBoard';
@@ -154,9 +153,6 @@ export const TaskDashboard: React.FC = () => {
           </div>
         </div>
       </header>
-
-      {/* Stats */}
-      <DashboardStats />
 
       {/* Filter Panel - only show for approval/execution views when toggled */}
       {showFilters && activeView !== 'notes' && activeView !== 'all' && activeView !== 'executions' && (
