@@ -15,6 +15,7 @@ export enum TaskStatus {
   APPROVED = 'approved',
   PAUSED = 'paused',
   IN_PROGRESS = 'in_progress',
+  REVIEW = 'review',
   COMPLETED = 'completed',
   FAILED = 'failed',
   CANCELLED = 'cancelled',
@@ -490,7 +491,7 @@ export interface TaskNotification {
 export type TaskStatusGroup = 'pending' | 'active' | 'completed' | 'failed';
 
 export const TASK_STATUS_GROUPS: Record<TaskStatusGroup, TaskStatus[]> = {
-  pending: [TaskStatus.DRAFT, TaskStatus.SUGGESTED, TaskStatus.PENDING_APPROVAL, TaskStatus.NEEDS_REFINEMENT],
+  pending: [TaskStatus.DRAFT, TaskStatus.SUGGESTED, TaskStatus.PENDING_APPROVAL, TaskStatus.NEEDS_REFINEMENT, TaskStatus.REVIEW],
   active: [TaskStatus.APPROVED, TaskStatus.PAUSED, TaskStatus.IN_PROGRESS],
   completed: [TaskStatus.COMPLETED],
   failed: [TaskStatus.FAILED, TaskStatus.CANCELLED, TaskStatus.BLOCKED],
@@ -528,6 +529,7 @@ export const STATUS_COLORS: Record<TaskStatus, string> = {
   [TaskStatus.APPROVED]: '#10B981',           // green-500
   [TaskStatus.PAUSED]: '#6366F1',             // indigo-500
   [TaskStatus.IN_PROGRESS]: '#3B82F6',        // blue-500
+  [TaskStatus.REVIEW]: '#A855F7',             // purple-500
   [TaskStatus.COMPLETED]: '#059669',          // green-600
   [TaskStatus.FAILED]: '#DC2626',             // red-600
   [TaskStatus.CANCELLED]: '#6B7280',          // gray-500

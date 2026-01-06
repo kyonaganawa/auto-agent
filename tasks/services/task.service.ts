@@ -100,6 +100,13 @@ export class TaskService {
   }
 
   /**
+   * Update task status
+   */
+  async updateTaskStatus(id: string, status: string): Promise<ApiResponse<Task>> {
+    return this.updateTask(id, { status });
+  }
+
+  /**
    * Delete task
    */
   async deleteTask(id: string): Promise<ApiResponse<void>> {
@@ -255,6 +262,38 @@ export class TaskService {
       if (data.auto_execute) {
         await this.executeTask(id);
       }
+
+      return { data: task };
+    } catch (error: any) {
+      return { error: { message: error.message } };
+    }
+  }
+
+  /**
+   * Reject a task
+   */
+  async rejectTask(id: string, reason: string, rejectedBy: string = 'dashboard-user'): Promise<ApiResponse<Task>> {
+    try {
+      const { data: task, error } = await this.supabase
+        .from('tasks')
+        .update({
+          status: 'rejected',
+          error_message: reason,
+        })
+        .eq('id', id)
+        .eq('status', 'pending_approval')  // Only reject if pending
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      // Add rejection comment
+      await this.addComment(id, {
+        comment: `Task rejected: ${reason}`,
+        comment_type: 'rejection',
+        author_type: 'human',
+        author_user_id: rejectedBy,
+      });
 
       return { data: task };
     } catch (error: any) {
@@ -841,4 +880,5 @@ export class TaskService {
 }
 
 // Export singleton instance
-export const taskService = new TaskService();
+// NOTE: Commented out for browser usage - each context should create its own instance
+// export const taskService = new TaskService();
