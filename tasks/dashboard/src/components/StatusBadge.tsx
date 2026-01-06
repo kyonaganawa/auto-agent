@@ -1,5 +1,5 @@
 import React from 'react';
-import { TaskStatus, STATUS_COLORS } from '../../../types/task.types';
+import { TaskStatus, STATUS_COLORS } from '../types/task.types';
 
 interface StatusBadgeProps {
   status: TaskStatus;

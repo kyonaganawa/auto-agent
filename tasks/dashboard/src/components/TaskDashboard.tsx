@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { taskService } from '../lib/taskService';
-import type { Task, TaskFilters, TaskStatus, TaskPriority, ExecutionSystem } from '../../../types/task.types';
+import type { Task, TaskFilters, TaskStatus, TaskPriority } from '../types/task.types';
 import { TaskList } from './TaskList';
 import { TaskDetail } from './TaskDetail';
 import { TaskForm } from './TaskForm';

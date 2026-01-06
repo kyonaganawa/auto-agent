@@ -4,7 +4,7 @@
  */
 
 import { supabase } from './supabase';
-import type { Note, CreateNoteDTO, UpdateNoteDTO, NoteFilters } from '../../../types/note.types';
+import type { Note, CreateNoteDTO, UpdateNoteDTO, NoteFilters } from '../types/note.types';
 
 export class NoteService {
   /**

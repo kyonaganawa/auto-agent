@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Task } from '../../../types/task.types';
+import { Task, TaskStatus } from '../types/task.types';
 import { StatusBadge } from './StatusBadge';
 import { PriorityBadge } from './PriorityBadge';
 import { taskService } from '../lib/taskService';
@@ -55,13 +55,13 @@ export const TaskDetail: React.FC<TaskDetailProps> = ({ task, onClose, onUpdate 
     setError(null);
 
     try {
-      const result = await taskService.updateTaskStatus(task.id, newStatus);
+      const result = await taskService.updateTaskStatus(task.id, newStatus as TaskStatus);
 
       if (result.error) {
         setError(result.error.message);
         setSelectedStatus(task.status); // Reset to original status
       } else {
-        setSelectedStatus(newStatus);
+        setSelectedStatus(newStatus as TaskStatus);
         onUpdate();
       }
     } catch (err: any) {
@@ -77,10 +77,7 @@ export const TaskDetail: React.FC<TaskDetailProps> = ({ task, onClose, onUpdate 
     setError(null);
 
     try {
-      const result = await taskService.approveTask(task.id, {
-        approved_by: 'dashboard-user', // You can replace this with actual user ID
-        auto_execute: false
-      });
+      const result = await taskService.approveTask(task.id);
 
       if (result.error) {
         setError(result.error.message);
@@ -103,7 +100,7 @@ export const TaskDetail: React.FC<TaskDetailProps> = ({ task, onClose, onUpdate 
     setError(null);
 
     try {
-      const result = await taskService.rejectTask(task.id, reason, 'dashboard-user');
+      const result = await taskService.rejectTask(task.id, reason);
 
       if (result.error) {
         setError(result.error.message);

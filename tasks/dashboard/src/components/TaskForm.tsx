@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { taskService } from '../lib/taskService';
-import type { Task, CreateTaskDTO, UpdateTaskDTO, TaskPriority, ExecutionSystem, TaskRecurrence } from '../../../types/task.types';
+import type { Task, CreateTaskDTO, UpdateTaskDTO, TaskPriority, ExecutionSystem, TaskRecurrence } from '../types/task.types';
 
 interface TaskFormProps {
   task?: Task;

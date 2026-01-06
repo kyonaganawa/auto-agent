@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TaskFilters } from '../../../types/task.types';
+import { TaskFilters } from '../types/task.types';
 
 interface FilterPanelProps {
   filters: TaskFilters;

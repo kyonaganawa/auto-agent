@@ -4,7 +4,7 @@
  */
 
 import { supabase } from './supabase';
-import type { Task, TaskFilters, CreateTaskDTO, UpdateTaskDTO } from '../../../types/task.types';
+import type { Task, TaskFilters, CreateTaskDTO, UpdateTaskDTO, TaskStatus } from '../types/task.types';
 
 export class TaskService {
   /**
@@ -113,7 +113,7 @@ export class TaskService {
   /**
    * Update task status
    */
-  async updateTaskStatus(id: string, status: Task['status']) {
+  async updateTaskStatus(id: string, status: TaskStatus) {
     return this.updateTask(id, { status });
   }
 
@@ -133,6 +133,27 @@ export class TaskService {
     } catch (error: any) {
       return { error: { message: error.message } };
     }
+  }
+
+  /**
+   * Get approval queue (tasks pending approval)
+   */
+  async getApprovalQueue() {
+    return this.getTasks({ status: 'pending_approval' });
+  }
+
+  /**
+   * Get execution queue (approved tasks ready to execute)
+   */
+  async getExecutionQueue() {
+    return this.getTasks({ status: 'approved' });
+  }
+
+  /**
+   * Query tasks with options
+   */
+  async queryTasks(options: { filters?: TaskFilters; limit?: number; offset?: number }) {
+    return this.getTasks(options.filters);
   }
 
   /**

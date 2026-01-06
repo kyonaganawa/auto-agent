@@ -1,5 +1,5 @@
 import React from 'react';
-import { TaskPriority, PRIORITY_COLORS, PRIORITY_LABELS } from '../../../types/task.types';
+import { TaskPriority, PRIORITY_COLORS, PRIORITY_LABELS } from '../types/task.types';
 
 interface PriorityBadgeProps {
   priority: TaskPriority;
