@@ -22,44 +22,42 @@ interface KanbanBoardProps {
 }
 
 interface ColumnConfig {
-  status: string;
+  statuses: string[]; // Support multiple statuses per column
   title: string;
   color: string;
+  showOnlyIfHasTasks?: boolean; // Optional: only show if tasks exist
 }
 
 const COLUMNS: ColumnConfig[] = [
   {
-    status: 'paused',
-    title: 'Paused',
-    color: '#8b5cf6', // Purple
-  },
-  {
-    status: 'pending_approval',
-    title: 'Pending Approval',
+    statuses: ['paused', 'pending_approval'],
+    title: 'Pending / Paused',
     color: '#f59e0b', // Orange
   },
   {
-    status: 'approved',
+    statuses: ['approved'],
     title: 'Approved',
     color: '#3b82f6', // Blue
   },
   {
-    status: 'in_progress',
+    statuses: ['in_progress'],
     title: 'In Progress',
     color: 'var(--color-accent-primary)', // Teal
+    showOnlyIfHasTasks: true,
   },
   {
-    status: 'review',
+    statuses: ['review'],
     title: 'Review',
     color: '#a855f7', // Purple-500
+    showOnlyIfHasTasks: true,
   },
   {
-    status: 'completed',
+    statuses: ['completed'],
     title: 'Completed',
     color: 'var(--status-completed)', // Green
   },
   {
-    status: 'failed',
+    statuses: ['failed'],
     title: 'Failed',
     color: 'var(--status-failed)', // Red
   },
@@ -125,10 +123,23 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ onTaskClick, refreshTr
     }
   };
 
-  // Group tasks by status
-  const getTasksByStatus = (status: TaskStatus): Task[] => {
-    return tasks.filter((task) => task.status === status);
+  // Group tasks by statuses (supports multiple statuses per column)
+  const getTasksByStatuses = (statuses: string[]): Task[] => {
+    return tasks.filter((task) => statuses.includes(task.status));
   };
+
+  // Check if column has tasks
+  const columnHasTasks = (statuses: string[]): boolean => {
+    return tasks.some((task) => statuses.includes(task.status));
+  };
+
+  // Filter columns based on visibility rules
+  const visibleColumns = COLUMNS.filter(column => {
+    if (column.showOnlyIfHasTasks) {
+      return columnHasTasks(column.statuses);
+    }
+    return true;
+  });
 
   if (loading) {
     return (
@@ -176,21 +187,21 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ onTaskClick, refreshTr
               Total: <strong>{tasks.length}</strong>
             </span>
             <span className="kanban-stat">
-              In Progress: <strong>{getTasksByStatus('in_progress').length}</strong>
+              In Progress: <strong>{getTasksByStatuses(['in_progress']).length}</strong>
             </span>
             <span className="kanban-stat">
-              Pending: <strong>{getTasksByStatus('pending_approval').length}</strong>
+              Pending: <strong>{getTasksByStatuses(['pending_approval', 'paused']).length}</strong>
             </span>
           </div>
         </div>
 
         <div className="kanban-columns">
-          {COLUMNS.map((column) => (
+          {visibleColumns.map((column) => (
             <KanbanColumn
-              key={column.status}
+              key={column.statuses.join('-')}
               title={column.title}
-              status={column.status}
-              tasks={getTasksByStatus(column.status as TaskStatus)}
+              status={column.statuses[0]}
+              tasks={getTasksByStatuses(column.statuses)}
               color={column.color}
               onTaskClick={onTaskClick}
             />
