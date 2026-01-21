@@ -13,6 +13,7 @@ import { FilterPanel } from './FilterPanel';
 import { NotesPanel } from './NotesPanel';
 import { KanbanBoard } from './KanbanBoard';
 import { ExecutionsPanel } from './ExecutionsPanel';
+import { DailyTodoPanel } from './DailyTodoPanel';
 
 export const TaskDashboard: React.FC = () => {
   // State
@@ -22,7 +23,7 @@ export const TaskDashboard: React.FC = () => {
   const [editingTask, setEditingTask] = useState<Task | undefined>(undefined);
   const [filters, setFilters] = useState<TaskFilters>({});
   const [loading, setLoading] = useState(true);
-  const [activeView, setActiveView] = useState<'all' | 'approval' | 'execution' | 'notes' | 'executions'>('all');
+  const [activeView, setActiveView] = useState<'all' | 'approval' | 'execution' | 'notes' | 'executions' | 'daily'>('all');
   const [showFilters, setShowFilters] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
@@ -132,11 +133,17 @@ export const TaskDashboard: React.FC = () => {
           >
             Executions
           </button>
+          <button
+            className={`tab ${activeView === 'daily' ? 'active' : ''}`}
+            onClick={() => setActiveView('daily')}
+          >
+            Daily
+          </button>
           </div>
 
           {/* Header Actions */}
           <div className="dashboard-header-actions">
-            {activeView !== 'notes' && activeView !== 'all' && activeView !== 'executions' && (
+            {activeView !== 'notes' && activeView !== 'all' && activeView !== 'executions' && activeView !== 'daily' && (
               <button
                 className={`btn btn-secondary ${showFilters ? 'active' : ''}`}
                 onClick={() => setShowFilters(!showFilters)}
@@ -155,7 +162,7 @@ export const TaskDashboard: React.FC = () => {
       </header>
 
       {/* Filter Panel - only show for approval/execution views when toggled */}
-      {showFilters && activeView !== 'notes' && activeView !== 'all' && activeView !== 'executions' && (
+      {showFilters && activeView !== 'notes' && activeView !== 'all' && activeView !== 'executions' && activeView !== 'daily' && (
         <FilterPanel
           filters={filters}
           onChange={handleFilterChange}
@@ -164,7 +171,12 @@ export const TaskDashboard: React.FC = () => {
 
       {/* Main Content */}
       <div className="dashboard-content">
-        {activeView === 'executions' ? (
+        {activeView === 'daily' ? (
+          /* Daily Todo Panel */
+          <div className="daily-container">
+            <DailyTodoPanel />
+          </div>
+        ) : activeView === 'executions' ? (
           /* Executions Panel */
           <div className="executions-container">
             <ExecutionsPanel />
@@ -353,7 +365,8 @@ export const TaskDashboard: React.FC = () => {
         }
 
         .notes-container,
-        .executions-container {
+        .executions-container,
+        .daily-container {
           grid-column: 1 / -1;
           max-width: 1600px;
           margin: 0 auto;
